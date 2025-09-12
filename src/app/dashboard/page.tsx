@@ -106,60 +106,6 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <UserGroupIcon className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Users</p>
-                <p className="text-2xl font-bold text-gray-900">1,247</p>
-                <p className="text-sm text-green-600">+12% from last month</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <ClipboardDocumentListIcon className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Onboarding Success</p>
-                <p className="text-2xl font-bold text-gray-900">94%</p>
-                <p className="text-sm text-green-600">+3% from last month</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <AcademicCapIcon className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Skill Completions</p>
-                <p className="text-2xl font-bold text-gray-900">3,456</p>
-                <p className="text-sm text-green-600">+28% from last month</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div className="flex items-center">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <ChartBarIcon className="h-6 w-6 text-orange-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">AI Interactions</p>
-                <p className="text-2xl font-bold text-gray-900">12,789</p>
-                <p className="text-sm text-green-600">+45% from last month</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Quick Actions */}
         <div className="mb-8">
