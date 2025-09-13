@@ -10,6 +10,7 @@ import {
   LightBulbIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline';
 
 export default function FeedbackPage() {
@@ -88,13 +89,27 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full mb-6 shadow-lg">
+            <ChatBubbleLeftRightIcon className="h-10 w-10 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            Feedback Analysis
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Collect, analyze, and gain insights from your feedback. Get AI-powered classification 
+            and actionable recommendations for your professional growth.
+          </p>
+        </div>
+
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-8 justify-center">
             <button
               onClick={() => setActiveTab('add')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -269,11 +284,11 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Strengths</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.strengths.map((strength: string, index: number) => (
+                    {analysisResult.data.summary?.strengths?.map((strength: string, index: number) => (
                       <div key={index} className="p-3 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-sm text-green-800">{strength}</p>
                       </div>
-                    ))}
+                    )) || <p className="text-gray-500 text-sm">No strengths identified yet.</p>}
                   </div>
                 </div>
 
@@ -284,11 +299,11 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Improvement Areas</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.improvements.map((improvement: string, index: number) => (
+                    {analysisResult.data.summary?.improvements?.map((improvement: string, index: number) => (
                       <div key={index} className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
                         <p className="text-sm text-orange-800">{improvement}</p>
                       </div>
-                    ))}
+                    )) || <p className="text-gray-500 text-sm">No improvement areas identified yet.</p>}
                   </div>
                 </div>
 
@@ -299,16 +314,19 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Actionable Insights</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.strengths_insights.map((insight: string, index: number) => (
+                    {analysisResult.data.summary?.strengths_insights?.map((insight: string, index: number) => (
                       <div key={index} className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm text-blue-800"><strong>Strengths:</strong> {insight}</p>
                       </div>
                     ))}
-                    {analysisResult.data.summary?.improvements_insights.map((insight: string, index: number) => (
+                    {analysisResult.data.summary?.improvements_insights?.map((insight: string, index: number) => (
                       <div key={index} className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                         <p className="text-sm text-yellow-800"><strong>Improvements:</strong> {insight}</p>
                       </div>
                     ))}
+                    {(!analysisResult.data.summary?.strengths_insights?.length && !analysisResult.data.summary?.improvements_insights?.length) && (
+                      <p className="text-gray-500 text-sm">No insights available yet.</p>
+                    )}
                   </div>
                 </div>
 
@@ -319,11 +337,11 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Growth Tips</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.growth_tips.map((tip: string, index: number) => (
+                    {analysisResult.data.summary?.growth_tips?.map((tip: string, index: number) => (
                       <div key={index} className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
                         <p className="text-sm text-purple-800">{tip}</p>
                       </div>
-                    ))}
+                    )) || <p className="text-gray-500 text-sm">No growth tips available yet.</p>}
                   </div>
                 </div>
               </div>

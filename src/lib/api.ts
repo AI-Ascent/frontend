@@ -3,7 +3,7 @@
  * Handles all API communication with the backend
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
 
 export interface LoginRequest {
   email: string;
@@ -48,18 +48,6 @@ export interface SummariseFeedbackResponse {
   };
 }
 
-export interface CreateOnboardItemRequest {
-  title: string;
-  specialization: string;
-  tags: string[];
-  checklist: string[];
-  resources: string[];
-}
-
-export interface CreateOnboardItemResponse {
-  message: string;
-  id: number;
-}
 
 export interface GetOnboardInfoRequest {
   email: string;
@@ -87,7 +75,6 @@ export interface CreateSkillResponse {
 export interface GetSkillRecommendationsRequest {
   email: string;
   skill_query: string;
-  additional_prompt?: string;
 }
 
 export interface GetSkillRecommendationsResponse {
@@ -98,6 +85,34 @@ export interface GetSkillRecommendationsResponse {
     url: string;
     relevance_score: number;
   }>;
+}
+
+export interface FindMentorsRequest {
+  email: string;
+  top_k?: number;
+}
+
+export interface FindMentorsResponse {
+  mentors: Array<{
+    email?: string;
+    job_title?: string;
+    specialization?: string;
+    strengths?: string[];
+    can_help_with: string;
+    llm_reason: string;
+    no_good_mentor?: boolean;
+  }>;
+}
+
+export interface CoordinatorAskRequest {
+  email: string;
+  query: string;
+}
+
+export interface CoordinatorAskResponse {
+  message: string;
+  action_items: string[];
+  resources: string[];
 }
 
 export interface ApiError {
@@ -129,7 +144,24 @@ class ApiClient {
       const response = await fetch(url, config);
       
       if (!response.ok) {
-        const errorData: ApiError = await response.json();
+        let errorData: ApiError;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          // If response is not JSON, create a generic error
+          errorData = { error: `HTTP error! status: ${response.status}` };
+        }
+        
+        // Handle rate limit errors more gracefully
+        if (response.status === 429 || (errorData.error && errorData.error.includes('Rate limit'))) {
+          throw new Error('AI service is currently busy. Please try again in a few minutes. This is due to high usage of our AI models.');
+        }
+        
+        // Handle tool call validation errors from backend
+        if (errorData.error && errorData.error.includes('Tool call validation failed')) {
+          throw new Error('AI agent configuration error: The backend AI model is trying to use unavailable tools. This requires backend configuration fixes.');
+        }
+        
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
@@ -173,13 +205,6 @@ class ApiClient {
   }
 
   // Onboarding Management
-  async createOnboardItem(data: CreateOnboardItemRequest): Promise<CreateOnboardItemResponse> {
-    return this.request<CreateOnboardItemResponse>('/onboard/create/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  }
-
   async getOnboardInfo(data: GetOnboardInfoRequest): Promise<GetOnboardInfoResponse> {
     return this.request<GetOnboardInfoResponse>('/onboard/get/', {
       method: 'POST',
@@ -202,6 +227,22 @@ class ApiClient {
     });
   }
 
+  // Mentor Finding
+  async findMentors(data: FindMentorsRequest): Promise<FindMentorsResponse> {
+    return this.request<FindMentorsResponse>('/find-mentors/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Coordinator Agent
+  async coordinatorAsk(data: CoordinatorAskRequest): Promise<CoordinatorAskResponse> {
+    return this.request<CoordinatorAskResponse>('/coordinator-ask/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     return this.request<{ status: string }>('/health/', {
@@ -213,15 +254,14 @@ class ApiClient {
 // Export singleton instance
 export const apiClient = new ApiClient();
 
-// Export individual methods for convenience
-export const {
-  login,
-  addFeedback,
-  classifyFeedback,
-  summariseFeedback,
-  createOnboardItem,
-  getOnboardInfo,
-  createSkill,
-  getSkillRecommendations,
-  healthCheck,
-} = apiClient;
+// Export individual methods for convenience (properly bound)
+export const login = apiClient.login.bind(apiClient);
+export const addFeedback = apiClient.addFeedback.bind(apiClient);
+export const classifyFeedback = apiClient.classifyFeedback.bind(apiClient);
+export const summariseFeedback = apiClient.summariseFeedback.bind(apiClient);
+export const getOnboardInfo = apiClient.getOnboardInfo.bind(apiClient);
+export const createSkill = apiClient.createSkill.bind(apiClient);
+export const getSkillRecommendations = apiClient.getSkillRecommendations.bind(apiClient);
+export const findMentors = apiClient.findMentors.bind(apiClient);
+export const coordinatorAsk = apiClient.coordinatorAsk.bind(apiClient);
+export const healthCheck = apiClient.healthCheck.bind(apiClient);

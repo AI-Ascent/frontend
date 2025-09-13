@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { apiClient } from '@/lib/api';
+import { getSkillRecommendations } from '@/lib/api';
 import Navigation from '@/components/Navigation';
 import {
-  PlusIcon,
   AcademicCapIcon,
   StarIcon,
   LinkIcon,
@@ -13,7 +12,6 @@ import {
 
 export default function SkillsPage() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'create' | 'recommend'>('create');
   const [isLoading, setIsLoading] = useState(false);
   const [skillResult, setSkillResult] = useState<{
     recommendations: Array<{
@@ -25,50 +23,10 @@ export default function SkillsPage() {
     }>;
   } | null>(null);
 
-  // Create form state
-  const [createForm, setCreateForm] = useState({
-    title: '',
-    tags: '',
-    type: '',
-    url: '',
-  });
-
   // Recommend form state
   const [recommendForm, setRecommendForm] = useState({
     skill_query: '',
-    additional_prompt: '',
   });
-
-  const handleCreateSkill = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const tags = createForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
-
-      const result = await apiClient.createSkill({
-        title: createForm.title,
-        tags,
-        type: createForm.type,
-        url: createForm.url,
-      });
-
-      alert(`Skill item created successfully! ID: ${result.id}`);
-      
-      // Reset form
-      setCreateForm({
-        title: '',
-        tags: '',
-        type: '',
-        url: '',
-      });
-    } catch (error) {
-      console.error('Error creating skill:', error);
-      alert('Failed to create skill item. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGetSkillRecommendations = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,10 +34,9 @@ export default function SkillsPage() {
 
     setIsLoading(true);
     try {
-      const result = await apiClient.getSkillRecommendations({
+      const result = await getSkillRecommendations({
         email: user.email,
         skill_query: recommendForm.skill_query,
-        additional_prompt: recommendForm.additional_prompt || undefined,
       });
 
       setSkillResult(result);
@@ -92,131 +49,27 @@ export default function SkillsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tab Navigation */}
-        <div className="mb-8">
-          <nav className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('create')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'create'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Create Skill Item
-            </button>
-            <button
-              onClick={() => setActiveTab('recommend')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'recommend'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Get Skill Recommendations
-            </button>
-          </nav>
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full mb-6 shadow-lg">
+            <AcademicCapIcon className="h-10 w-10 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+            Skill Development
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Discover and develop new skills with AI-powered recommendations. Create learning paths 
+            and access curated resources tailored to your professional growth.
+          </p>
         </div>
 
-        {/* Create Skill Item Tab */}
-        {activeTab === 'create' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Create New Skill Item</h2>
-            <form onSubmit={handleCreateSkill} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                    Skill Title *
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    value={createForm.title}
-                    onChange={(e) => setCreateForm({ ...createForm, title: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="e.g., Advanced Python Programming"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
-                    Skill Type *
-                  </label>
-                  <select
-                    id="type"
-                    value={createForm.type}
-                    onChange={(e) => setCreateForm({ ...createForm, type: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  >
-                    <option value="">Select type...</option>
-                    <option value="Course">Course</option>
-                    <option value="Tutorial">Tutorial</option>
-                    <option value="Article">Article</option>
-                    <option value="Video">Video</option>
-                    <option value="Book">Book</option>
-                    <option value="Tool">Tool</option>
-                  </select>
-                </div>
-              </div>
 
-              <div>
-                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-                  Tags (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  value={createForm.tags}
-                  onChange={(e) => setCreateForm({ ...createForm, tags: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="e.g., python, programming, advanced, algorithms"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-                  Resource URL *
-                </label>
-                <input
-                  type="url"
-                  id="url"
-                  value={createForm.url}
-                  onChange={(e) => setCreateForm({ ...createForm, url: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://example.com/skill-resource"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading || !createForm.title || !createForm.type || !createForm.url}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Creating...
-                  </>
-                ) : (
-                  <>
-                    <PlusIcon className="h-4 w-4 mr-2" />
-                    Create Skill Item
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Get Skill Recommendations Tab */}
-        {activeTab === 'recommend' && (
-          <div className="space-y-6">
+        {/* Get Skill Recommendations */}
+        <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Get Skill Recommendations</h2>
               <p className="text-sm text-gray-600 mb-4">
@@ -235,19 +88,6 @@ export default function SkillsPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="e.g., learn advanced Python programming, improve backend development skills"
                     required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="additional_prompt" className="block text-sm font-medium text-gray-700 mb-2">
-                    Additional Context (Optional)
-                  </label>
-                  <textarea
-                    id="additional_prompt"
-                    rows={3}
-                    value={recommendForm.additional_prompt}
-                    onChange={(e) => setRecommendForm({ ...recommendForm, additional_prompt: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="e.g., focus on practical projects, prefer video content, include certification paths"
                   />
                 </div>
                 <button
@@ -275,7 +115,7 @@ export default function SkillsPage() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Recommended Skills</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {skillResult.recommendations.map((skill, index) => (
+                  {skillResult.recommendations?.map((skill, index) => (
                     <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                       <div className="flex items-start justify-between mb-4">
                         <h4 className="text-md font-semibold text-gray-900">{skill.title}</h4>
@@ -292,7 +132,7 @@ export default function SkillsPage() {
                           {skill.type}
                         </span>
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {skill.tags.map((tag, tagIndex) => (
+                          {skill.tags?.map((tag, tagIndex) => (
                             <span key={tagIndex} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
                               {tag}
                             </span>
@@ -312,12 +152,11 @@ export default function SkillsPage() {
                         </a>
                       </div>
                     </div>
-                  ))}
+                  )) || <p className="text-gray-500 text-sm col-span-full">No skill recommendations available yet.</p>}
                 </div>
               </div>
             )}
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
