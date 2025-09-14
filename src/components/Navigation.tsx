@@ -12,7 +12,6 @@ import {
   AcademicCapIcon,
   UserGroupIcon,
   SparklesIcon,
-  CogIcon,
   Bars3Icon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -29,7 +28,6 @@ export default function Navigation() {
     { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
     { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
     { name: 'Ask', href: '/assistant', icon: SparklesIcon },
-    { name: 'Admin', href: '/admin', icon: CogIcon },
   ];
 
   const isActive = (href: string) => pathname === href;
