@@ -73,15 +73,12 @@ export default function AdminPage() {
       const checklist = onboardForm.checklist.split('\n').map(item => item.trim()).filter(item => item);
       const resources = onboardForm.resources.split('\n').map(resource => resource.trim()).filter(resource => resource);
 
-      await apiClient.request('/onboard/create/', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: onboardForm.title,
-          specialization: onboardForm.specialization,
-          tags,
-          checklist,
-          resources
-        })
+      await apiClient.createOnboardItem({
+        title: onboardForm.title,
+        specialization: onboardForm.specialization,
+        tags,
+        checklist,
+        resources
       });
 
       setSuccessMessage('Onboarding item created successfully!');

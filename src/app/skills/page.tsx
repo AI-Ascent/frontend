@@ -14,13 +14,17 @@ export default function SkillsPage() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [skillResult, setSkillResult] = useState<{
-    recommendations: Array<{
+    skills: Array<{
       title: string;
-      tags: string[];
-      type: string;
-      url: string;
-      relevance_score: number;
+      description: string;
+      learning_outcomes: string[];
+      resources: Array<{
+        title: string;
+        url: string;
+        type: string;
+      }>;
     }>;
+    explanation: string;
   } | null>(null);
 
   // Recommend form state
@@ -63,7 +67,7 @@ export default function SkillsPage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Discover and develop new skills with AI-powered recommendations. Create learning paths 
-            and access curated resources tailored to your professional growth.
+            and access curated resources tailored to your professional growth. It uses your feedback to generate recommendations.
           </p>
         </div>
 
@@ -112,47 +116,57 @@ export default function SkillsPage() {
 
             {/* Skill Recommendations Results */}
             {skillResult && (
-              <div className="space-y-4">
+              <div className="space-y-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-blue-900 mb-2">AI Explanation</h3>
+                  <p className="text-blue-800">{skillResult.explanation}</p>
+                </div>
+                
                 <h3 className="text-lg font-semibold text-gray-900">Recommended Skills</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {skillResult.recommendations?.map((skill, index) => (
+                <div className="space-y-6">
+                  {skillResult.skills?.map((skill, index) => (
                     <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <h4 className="text-md font-semibold text-gray-900">{skill.title}</h4>
-                        <div className="flex items-center">
-                          <StarIcon className="h-4 w-4 text-yellow-500 mr-1" />
-                          <span className="text-sm text-gray-600">
-                            {(skill.relevance_score * 100).toFixed(0)}%
-                          </span>
-                        </div>
-                      </div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-3">{skill.title}</h4>
+                      <p className="text-gray-600 mb-4">{skill.description}</p>
                       
-                      <div className="mb-4">
-                        <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full mb-2">
-                          {skill.type}
-                        </span>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {skill.tags?.map((tag, tagIndex) => (
-                            <span key={tagIndex} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                              {tag}
-                            </span>
-                          ))}
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Learning Outcomes:</h5>
+                          <ul className="space-y-1">
+                            {skill.learning_outcomes.map((outcome, outcomeIndex) => (
+                              <li key={outcomeIndex} className="flex items-start">
+                                <span className="text-green-500 mr-2">•</span>
+                                <span className="text-sm text-gray-600">{outcome}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <a
-                          href={skill.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
-                        >
-                          <LinkIcon className="h-4 w-4 mr-1" />
-                          View Resource
-                        </a>
+                        
+                        <div>
+                          <h5 className="text-sm font-medium text-gray-700 mb-2">Resources:</h5>
+                          <div className="space-y-2">
+                            {skill.resources.map((resource, resourceIndex) => (
+                              <div key={resourceIndex} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-gray-900">{resource.title}</p>
+                                  <p className="text-xs text-gray-500 capitalize">{resource.type}</p>
+                                </div>
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 ml-3"
+                                >
+                                  <LinkIcon className="h-4 w-4 mr-1" />
+                                  View
+                                </a>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  )) || <p className="text-gray-500 text-sm col-span-full">No skill recommendations available yet.</p>}
+                  )) || <p className="text-gray-500 text-sm">No skill recommendations available yet.</p>}
                 </div>
               </div>
             )}

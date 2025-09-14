@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api';
 import Navigation from '@/components/Navigation';
 import {
-  PlusIcon,
   BookOpenIcon,
   CheckCircleIcon,
   SparklesIcon,

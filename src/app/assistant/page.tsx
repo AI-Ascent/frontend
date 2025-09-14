@@ -99,7 +99,7 @@ export default function AssistantPage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Ask me anything about your career development, skills, onboarding, or feedback. 
-            I'll provide personalized advice with actionable steps and resources.
+            I&apos;ll provide personalized advice with actionable steps and resources.
           </p>
         </div>
 
@@ -232,33 +232,33 @@ export default function AssistantPage() {
                   <div className="space-y-2">
                     <p className="text-blue-800 font-medium">Career Development:</p>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• "What skills should I develop for my role?"</li>
-                      <li>• "How can I advance in my current position?"</li>
-                      <li>• "What certifications would benefit me?"</li>
+                      <li>• &quot;What skills should I develop for my role?&quot;</li>
+                      <li>• &quot;How can I advance in my current position?&quot;</li>
+                      <li>• &quot;What certifications would benefit me?&quot;</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <p className="text-blue-800 font-medium">Feedback & Growth:</p>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• "How can I improve my communication skills?"</li>
-                      <li>• "What should I focus on based on my feedback?"</li>
-                      <li>• "How can I become a better leader?"</li>
+                      <li>• &quot;How can I improve my communication skills?&quot;</li>
+                      <li>• &quot;What should I focus on based on my feedback?&quot;</li>
+                      <li>• &quot;How can I become a better leader?&quot;</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <p className="text-blue-800 font-medium">Onboarding & Learning:</p>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• "What should I prioritize in my onboarding?"</li>
-                      <li>• "Which team members should I connect with?"</li>
-                      <li>• "What resources are most important for me?"</li>
+                      <li>• &quot;What should I prioritize in my onboarding?&quot;</li>
+                      <li>• &quot;Which team members should I connect with?&quot;</li>
+                      <li>• &quot;What resources are most important for me?&quot;</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <p className="text-blue-800 font-medium">General Advice:</p>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• "How can I improve my work-life balance?"</li>
-                      <li>• "What networking opportunities should I pursue?"</li>
-                      <li>• "How can I contribute more to my team?"</li>
+                      <li>• &quot;How can I improve my work-life balance?&quot;</li>
+                      <li>• &quot;What networking opportunities should I pursue?&quot;</li>
+                      <li>• &quot;How can I contribute more to my team?&quot;</li>
                     </ul>
                   </div>
                 </div>

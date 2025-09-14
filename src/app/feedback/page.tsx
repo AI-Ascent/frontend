@@ -16,6 +16,7 @@ import {
 export default function FeedbackPage() {
   const { user } = useAuth();
   const [newFeedback, setNewFeedback] = useState('');
+  const [feedbackEmail, setFeedbackEmail] = useState('');
   const [isAddingFeedback, setIsAddingFeedback] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<{
@@ -26,27 +27,26 @@ export default function FeedbackPage() {
         improvements: string[];
       };
       summary?: {
-        strengths: string[];
-        improvements: string[];
         strengths_insights: string[];
         improvements_insights: string[];
         growth_tips: string[];
       };
     };
   } | null>(null);
-  const [activeTab, setActiveTab] = useState<'add' | 'classify' | 'summarise'>('add');
+  const [activeTab, setActiveTab] = useState<'add' | 'classify' | 'summarise'>('summarise');
 
   const handleAddFeedback = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newFeedback.trim() || !user?.email) return;
+    if (!newFeedback.trim() || !feedbackEmail.trim()) return;
 
     setIsAddingFeedback(true);
     try {
       await apiClient.addFeedback({
-        email: user.email,
+        email: feedbackEmail,
         feedback: newFeedback.trim(),
       });
       setNewFeedback('');
+      setFeedbackEmail('');
       alert('Feedback added successfully!');
     } catch (error) {
       console.error('Error adding feedback:', error);
@@ -148,6 +148,20 @@ export default function FeedbackPage() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Add New Feedback</h2>
             <form onSubmit={handleAddFeedback} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Employee Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={feedbackEmail}
+                  onChange={(e) => setFeedbackEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter employee email address"
+                  required
+                />
+              </div>
               <div>
                 <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-2">
                   Feedback Text
@@ -284,7 +298,7 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Strengths</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.strengths?.map((strength: string, index: number) => (
+                    {analysisResult.data.summary?.strengths_insights?.map((strength: string, index: number) => (
                       <div key={index} className="p-3 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-sm text-green-800">{strength}</p>
                       </div>
@@ -299,7 +313,7 @@ export default function FeedbackPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Improvement Areas</h3>
                   </div>
                   <div className="space-y-3">
-                    {analysisResult.data.summary?.improvements?.map((improvement: string, index: number) => (
+                    {analysisResult.data.summary?.improvements_insights?.map((improvement: string, index: number) => (
                       <div key={index} className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
                         <p className="text-sm text-orange-800">{improvement}</p>
                       </div>
@@ -307,28 +321,6 @@ export default function FeedbackPage() {
                   </div>
                 </div>
 
-                {/* Insights */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <div className="flex items-center mb-4">
-                    <LightBulbIcon className="h-6 w-6 text-blue-600 mr-2" />
-                    <h3 className="text-lg font-semibold text-gray-900">Actionable Insights</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {analysisResult.data.summary?.strengths_insights?.map((insight: string, index: number) => (
-                      <div key={index} className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800"><strong>Strengths:</strong> {insight}</p>
-                      </div>
-                    ))}
-                    {analysisResult.data.summary?.improvements_insights?.map((insight: string, index: number) => (
-                      <div key={index} className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <p className="text-sm text-yellow-800"><strong>Improvements:</strong> {insight}</p>
-                      </div>
-                    ))}
-                    {(!analysisResult.data.summary?.strengths_insights?.length && !analysisResult.data.summary?.improvements_insights?.length) && (
-                      <p className="text-gray-500 text-sm">No insights available yet.</p>
-                    )}
-                  </div>
-                </div>
 
                 {/* Growth Tips */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

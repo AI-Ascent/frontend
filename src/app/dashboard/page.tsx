@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import {
-  ChartBarIcon,
   UserGroupIcon,
   AcademicCapIcon,
   ChatBubbleLeftRightIcon,
@@ -125,7 +124,7 @@ export default function DashboardPage() {
             Welcome back, {user?.name}!
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Ready to accelerate your talent development journey? Let's explore your personalized growth opportunities.
+            Ready to accelerate your talent development journey? Let&apos;s explore your personalized growth opportunities.
           </p>
         </div>
 

@@ -3,7 +3,7 @@
  * Handles all API communication with the backend
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ai-ascent-backend-azure.orangemushroom-0d454bb1.japanwest.azurecontainerapps.io/api';
 
 export interface LoginRequest {
   email: string;
@@ -40,8 +40,6 @@ export interface SummariseFeedbackRequest {
 
 export interface SummariseFeedbackResponse {
   summary: {
-    strengths: string[];
-    improvements: string[];
     strengths_insights: string[];
     improvements_insights: string[];
     growth_tips: string[];
@@ -58,6 +56,19 @@ export interface GetOnboardInfoResponse {
   checklist: string[];
   resources: string[];
   explanation: string;
+}
+
+export interface CreateOnboardItemRequest {
+  title: string;
+  specialization: string;
+  tags: string[];
+  checklist: string[];
+  resources: string[];
+}
+
+export interface CreateOnboardItemResponse {
+  message: string;
+  id: number;
 }
 
 export interface CreateSkillRequest {
@@ -78,13 +89,17 @@ export interface GetSkillRecommendationsRequest {
 }
 
 export interface GetSkillRecommendationsResponse {
-  recommendations: Array<{
+  skills: Array<{
     title: string;
-    tags: string[];
-    type: string;
-    url: string;
-    relevance_score: number;
+    description: string;
+    learning_outcomes: string[];
+    resources: Array<{
+      title: string;
+      url: string;
+      type: string;
+    }>;
   }>;
+  explanation: string;
 }
 
 export interface FindMentorsRequest {
@@ -147,7 +162,7 @@ class ApiClient {
         let errorData: ApiError;
         try {
           errorData = await response.json();
-        } catch (parseError) {
+        } catch {
           // If response is not JSON, create a generic error
           errorData = { error: `HTTP error! status: ${response.status}` };
         }
@@ -212,6 +227,13 @@ class ApiClient {
     });
   }
 
+  async createOnboardItem(data: CreateOnboardItemRequest): Promise<CreateOnboardItemResponse> {
+    return this.request<CreateOnboardItemResponse>('/onboard/create/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Skill Management
   async createSkill(data: CreateSkillRequest): Promise<CreateSkillResponse> {
     return this.request<CreateSkillResponse>('/create-skill/', {
@@ -260,6 +282,7 @@ export const addFeedback = apiClient.addFeedback.bind(apiClient);
 export const classifyFeedback = apiClient.classifyFeedback.bind(apiClient);
 export const summariseFeedback = apiClient.summariseFeedback.bind(apiClient);
 export const getOnboardInfo = apiClient.getOnboardInfo.bind(apiClient);
+export const createOnboardItem = apiClient.createOnboardItem.bind(apiClient);
 export const createSkill = apiClient.createSkill.bind(apiClient);
 export const getSkillRecommendations = apiClient.getSkillRecommendations.bind(apiClient);
 export const findMentors = apiClient.findMentors.bind(apiClient);
