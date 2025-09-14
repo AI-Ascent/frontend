@@ -3,16 +3,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { findMentors } from '@/lib/api';
+import Navigation from '@/components/Navigation';
 import { 
   UserGroupIcon, 
   MagnifyingGlassIcon, 
   CheckCircleIcon,
   ExclamationTriangleIcon,
   StarIcon,
-  SparklesIcon,
-  ArrowLeftIcon
+  SparklesIcon
 } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
 
 interface Mentor {
   email?: string;
@@ -30,7 +29,6 @@ interface MentorsResult {
 
 export default function MentorsPage() {
   const { user } = useAuth();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [mentorsResult, setMentorsResult] = useState<MentorsResult | null>(null);
 
@@ -56,18 +54,10 @@ export default function MentorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <div className="mb-6">
-          <button
-            onClick={() => router.back()}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-200"
-          >
-            <ArrowLeftIcon className="h-4 w-4 mr-2" />
-            Back
-          </button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
+      <Navigation />
+      <div className="py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="text-center mb-12">
@@ -220,6 +210,7 @@ export default function MentorsPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
