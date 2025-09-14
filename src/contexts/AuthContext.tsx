@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api';
 
 interface User {
+  id: number;
   email: string;
-  name: string;
-  role: string;
+  job_title: string;
+  specialization: string;
+  name?: string; // For backward compatibility
 }
 
 interface AuthContextType {
@@ -32,13 +34,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkAuth = async () => {
       try {
         const savedUser = localStorage.getItem('aiAscentUser');
-        if (savedUser) {
+        const token = localStorage.getItem('access_token');
+        
+        if (savedUser && token) {
           const userData = JSON.parse(savedUser);
           setUser(userData);
+          // Ensure token is set in API client
+          apiClient.setToken(token);
+        } else {
+          // Clear invalid session
+          localStorage.removeItem('aiAscentUser');
+          localStorage.removeItem('access_token');
+          apiClient.clearToken();
         }
       } catch (error) {
         console.error('Error checking auth:', error);
         localStorage.removeItem('aiAscentUser');
+        localStorage.removeItem('access_token');
+        apiClient.clearToken();
       } finally {
         setIsLoading(false);
       }
@@ -52,14 +65,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setError(null);
 
     try {
-      // Try backend authentication first
       const response = await apiClient.login({ email, password });
       
-      if (response.message === 'Authentication successful.') {
+      if (response.message === 'Authentication successful.' && response.access_token) {
         const userData: User = {
-          email,
-          name: email.split('@')[0],
-          role: 'Employee',
+          id: response.user.id,
+          email: response.user.email,
+          job_title: response.user.job_title,
+          specialization: response.user.specialization,
+          name: response.user.email.split('@')[0], // For backward compatibility
         };
         
         setUser(userData);
@@ -80,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('aiAscentUser');
+    apiClient.clearToken(); // Clear JWT token
     setError(null);
     router.push('/');
   };

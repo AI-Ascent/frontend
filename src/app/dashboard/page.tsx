@@ -67,46 +67,20 @@ export default function DashboardPage() {
     },
     {
       title: 'Coordinator Ask',
-      description: 'Get personalized career advice and guidance',
+      description: 'Master AI coordinator that leverages all specialized agents (feedback analysis, skill recommendations, mentor matching, onboarding) to provide comprehensive, personalized career guidance',
       icon: SparklesIcon,
       href: '/assistant',
       color: 'bg-pink-500',
     },
     {
       title: 'Admin Panel',
-      description: 'Manage onboarding catalogs and skill databases',
+      description: 'Manage onboarding items and system configurations',
       icon: CogIcon,
       href: '/admin',
       color: 'bg-gray-500',
     },
   ];
 
-  const recentActivity = [
-    {
-      time: '2 hours ago',
-      activity: 'New hire Alex completed onboarding checklist',
-      type: 'Onboarding',
-      status: 'Completed',
-    },
-    {
-      time: '4 hours ago',
-      activity: 'Sarah finished Python fundamentals course',
-      type: 'Learning',
-      status: 'Completed',
-    },
-    {
-      time: '6 hours ago',
-      activity: 'Team completed Q4 feedback reviews',
-      type: 'Feedback',
-      status: 'Completed',
-    },
-    {
-      time: '1 day ago',
-      activity: 'Mentor matching completed for 15 employees',
-      type: 'Matching',
-      status: 'Completed',
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
@@ -161,31 +135,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {recentActivity.map((activity, index) => (
-              <div key={index} className="px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      {activity.activity}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {activity.time} • {activity.type}
-                    </p>
-                  </div>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    {activity.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );

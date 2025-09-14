@@ -12,6 +12,13 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   message: string;
+  access_token: string;
+  user: {
+    id: number;
+    email: string;
+    job_title: string;
+    specialization: string;
+  };
 }
 
 export interface AddFeedbackRequest {
@@ -136,9 +143,34 @@ export interface ApiError {
 
 class ApiClient {
   private baseUrl: string;
+  private accessToken: string | null = null;
 
   constructor(baseUrl: string = API_BASE_URL) {
     this.baseUrl = baseUrl;
+    // Load token from localStorage on initialization
+    if (typeof window !== 'undefined') {
+      this.accessToken = localStorage.getItem('access_token');
+    }
+  }
+
+  // Token management methods
+  setToken(token: string | null) {
+    this.accessToken = token;
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('access_token', token);
+      } else {
+        localStorage.removeItem('access_token');
+      }
+    }
+  }
+
+  getToken(): string | null {
+    return this.accessToken;
+  }
+
+  clearToken() {
+    this.setToken(null);
   }
 
   private async request<T>(
@@ -147,11 +179,18 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(options.headers as Record<string, string>),
+    };
+
+    // Add Authorization header if token exists
+    if (this.accessToken) {
+      headers['Authorization'] = `Bearer ${this.accessToken}`;
+    }
+
     const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
       ...options,
     };
 
@@ -191,10 +230,17 @@ class ApiClient {
 
   // User Authentication
   async login(data: LoginRequest): Promise<LoginResponse> {
-    return this.request<LoginResponse>('/login/', {
+    const response = await this.request<LoginResponse>('/login/', {
       method: 'POST',
       body: JSON.stringify(data),
     });
+    
+    // Store the access token
+    if (response.access_token) {
+      this.setToken(response.access_token);
+    }
+    
+    return response;
   }
 
   // Feedback Management

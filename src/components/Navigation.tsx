@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
@@ -27,7 +28,7 @@ export default function Navigation() {
     { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
     { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
     { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
-    { name: 'AI Ask', href: '/assistant', icon: SparklesIcon },
+    { name: 'Ask', href: '/assistant', icon: SparklesIcon },
     { name: 'Admin', href: '/admin', icon: CogIcon },
   ];
 
@@ -40,10 +41,19 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/dashboard" className="flex items-center group">
-              <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                <span className="text-sm font-bold text-white">AI</span>
+              <div className="relative h-10 w-auto rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                <Image
+                  src="/images/logo.png"
+                  alt="AI Ascent Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain w-full h-full"
+                  priority
+                />
               </div>
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Ascent</span>
+              <span className="ml-3 text-xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors duration-300">
+                AI Ascent
+              </span>
             </Link>
           </div>
 
@@ -60,7 +70,7 @@ export default function Navigation() {
                 }`}
               >
                 <item.icon className="h-4 w-4 mr-1.5" />
-                <span className="hidden xl:inline">{item.name}</span>
+                <span className="hidden lg:inline">{item.name}</span>
               </Link>
             ))}
           </div>
