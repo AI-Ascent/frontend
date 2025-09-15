@@ -35,7 +35,7 @@ export default function Navigation() {
   return (
     <nav className="bg-white/80 backdrop-blur-md shadow-soft border-b border-gray-200/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/dashboard" className="flex items-center group">
@@ -55,8 +55,8 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-2 ml-8 flex-1 justify-center">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center space-x-2 flex-1 justify-center">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -74,7 +74,7 @@ export default function Navigation() {
           </div>
 
           {/* Tablet Navigation - Icons Only */}
-          <div className="hidden md:flex lg:hidden items-center space-x-1 ml-8 flex-1 justify-center">
+          <div className="hidden md:flex lg:hidden items-center space-x-1 flex-1 justify-center">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -91,32 +91,35 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* User Menu */}
-          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 ml-2 sm:ml-4">
-            <div className="hidden lg:block text-right">
-              <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
-            </div>
-            
-            <div className="relative">
-              <div className="h-8 w-8 sm:h-9 sm:w-9 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center shadow-sm">
-                <span className="text-xs sm:text-sm font-medium text-indigo-600">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </span>
+          {/* Right Side - User Menu and Mobile Button */}
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            {/* User Menu - Hidden on mobile */}
+            <div className="hidden md:flex items-center space-x-2 sm:space-x-3">
+              <div className="hidden lg:block text-right">
+                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                <p className="text-xs text-gray-500">{user?.email}</p>
               </div>
+              
+              <div className="relative">
+                <div className="h-8 w-8 sm:h-9 sm:w-9 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="text-xs sm:text-sm font-medium text-indigo-600">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={logout}
+                className="hidden md:block text-gray-600 hover:text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition-all duration-200"
+              >
+                Sign Out
+              </button>
             </div>
 
-            <button
-              onClick={logout}
-              className="hidden md:block text-gray-600 hover:text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition-all duration-200"
-            >
-              Sign Out
-            </button>
-
-            {/* Mobile menu button */}
+            {/* Mobile menu button - always at far right */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 sm:p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className="md:hidden p-1.5 sm:p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex-shrink-0"
             >
               {mobileMenuOpen ? (
                 <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />

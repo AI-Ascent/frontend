@@ -11,7 +11,6 @@ import {
   ChatBubbleLeftRightIcon,
   ClipboardDocumentListIcon,
   SparklesIcon,
-  CogIcon,
 } from '@heroicons/react/24/outline';
 
 export default function DashboardPage() {
@@ -71,13 +70,6 @@ export default function DashboardPage() {
       icon: SparklesIcon,
       href: '/assistant',
       color: 'bg-pink-500',
-    },
-    {
-      title: 'Admin Panel',
-      description: 'Manage onboarding items and system configurations',
-      icon: CogIcon,
-      href: '/admin',
-      color: 'bg-gray-500',
     },
   ];
 

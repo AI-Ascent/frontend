@@ -262,9 +262,9 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-between items-center py-4 sm:py-6">
             <div className="flex items-center">
-              <div className="relative h-10 w-auto rounded-lg overflow-hidden shadow-md">
+              <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-lg overflow-hidden shadow-md">
         <Image
                   src="/images/logo.png"
                   alt="AI Ascent Logo"
@@ -274,17 +274,18 @@ export default function Home() {
           priority
         />
               </div>
-              <div className="ml-3">
-                <h1 className="text-xl font-bold text-indigo-600">AI Ascent</h1>
+              <div className="ml-2 sm:ml-3">
+                <h1 className="text-lg sm:text-xl font-bold text-indigo-600">AI Ascent</h1>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link
                 href="/login"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-2 sm:px-6 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                Access Platform
+                <span className="hidden sm:inline">Access Platform</span>
+                <span className="sm:hidden">Login</span>
               </Link>
             </div>
           </div>
@@ -292,20 +293,20 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-24">
+      <section className="py-12 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 sm:mb-6 leading-tight">
             Our Talent Intelligence
           </h1>
-          <p className="text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4">
             Transform your workforce with AI-powered talent development. Our enterprise platform 
             delivers intelligent feedback analysis, personalized onboarding, and data-driven insights 
             that accelerate organizational growth and employee success.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
             <Link
               href="/login"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-10 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 sm:px-10 sm:py-4 rounded-xl text-base sm:text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Access Your Platform
             </Link>
@@ -314,27 +315,27 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white">
+      <section className="py-12 sm:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+          <div className="text-center mb-12 sm:mb-20">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
               Our AI Capabilities
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Advanced machine learning and natural language processing power every aspect of talent development
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
-                <div className={`inline-flex p-4 bg-gradient-to-r ${feature.color} rounded-xl mb-6 shadow-md`}>
-                  <feature.icon className="h-8 w-8 text-white" />
+              <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
+                <div className={`inline-flex p-3 sm:p-4 bg-gradient-to-r ${feature.color} rounded-xl mb-4 sm:mb-6 shadow-md`}>
+                  <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -564,7 +565,7 @@ export default function Home() {
             </div>
           </div>
           <div className="text-center">
-            <p className="text-gray-400">&copy; 2024 AI Ascent. All rights reserved.</p>
+            <p className="text-gray-400">&copy; 2025 AI Ascent. All rights reserved.</p>
           </div>
         </div>
       </footer>
