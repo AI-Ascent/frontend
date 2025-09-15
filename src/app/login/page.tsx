@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/Toast';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function LoginPage() {
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { login, isAuthenticated, isLoading } = useAuth();
+  const { showErrorToast } = useToast();
   const router = useRouter();
 
   // Redirect if already authenticated
@@ -31,7 +33,8 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (error) {
-      console.error('Login error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';
+      showErrorToast(errorMessage, () => handleSubmit(e));
     } finally {
       setIsSubmitting(false);
     }

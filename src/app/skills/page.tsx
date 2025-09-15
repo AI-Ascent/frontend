@@ -3,15 +3,16 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getSkillRecommendations } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
 import {
   AcademicCapIcon,
-  StarIcon,
   LinkIcon,
 } from '@heroicons/react/24/outline';
 
 export default function SkillsPage() {
   const { user } = useAuth();
+  const { showErrorToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [skillResult, setSkillResult] = useState<{
     skills: Array<{
@@ -45,8 +46,11 @@ export default function SkillsPage() {
 
       setSkillResult(result);
     } catch (error) {
-      console.error('Error getting skill recommendations:', error);
-      alert('Failed to get skill recommendations. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to get skill recommendations. Please try again.';
+      showErrorToast(errorMessage, () => {
+        const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+        handleGetSkillRecommendations(mockEvent);
+      });
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +93,7 @@ export default function SkillsPage() {
                     id="skill_query"
                     value={recommendForm.skill_query}
                     onChange={(e) => setRecommendForm({ ...recommendForm, skill_query: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     placeholder="e.g., learn advanced Python programming, improve backend development skills"
                     required
                   />

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { findMentors } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
 import { 
   UserGroupIcon, 
@@ -29,6 +30,7 @@ interface MentorsResult {
 
 export default function MentorsPage() {
   const { user } = useAuth();
+  const { showErrorToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [mentorsResult, setMentorsResult] = useState<MentorsResult | null>(null);
 
@@ -46,8 +48,8 @@ export default function MentorsPage() {
       });
       setMentorsResult(result);
     } catch (error) {
-      console.error('Error finding mentors:', error);
-      alert('Failed to find mentors. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to find mentors. Please try again.';
+      showErrorToast(errorMessage, () => handleFindMentors());
     } finally {
       setIsLoading(false);
     }
@@ -176,9 +178,12 @@ export default function MentorsPage() {
                               <span className="text-sm text-gray-500">
                                 Contact: {mentor.email}
                               </span>
-                              <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                              <a 
+                                href={`mailto:${mentor.email}`}
+                                className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                              >
                                 Connect
-                              </button>
+                              </a>
                             </div>
                           )}
                         </div>

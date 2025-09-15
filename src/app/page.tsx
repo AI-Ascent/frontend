@@ -148,7 +148,7 @@ export default function Home() {
         'Coordinates multiple AI agents for complex career queries',
         'Provides comprehensive career guidance by leveraging all available data',
         'Generates personalized action items and resource recommendations',
-        'Enterprise-grade multi-agent coordination with JSON formatting and guardrails'
+        'Our multi-agent coordination with JSON formatting and guardrails'
       ],
       icon: SparklesIcon,
       color: 'from-indigo-500 to-indigo-600'
@@ -276,7 +276,6 @@ export default function Home() {
               </div>
               <div className="ml-3">
                 <h1 className="text-xl font-bold text-indigo-600">AI Ascent</h1>
-                <p className="text-sm text-gray-500">Enterprise Edition</p>
               </div>
             </div>
             
@@ -296,7 +295,7 @@ export default function Home() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
-            Enterprise Talent Intelligence
+            Our Talent Intelligence
           </h1>
           <p className="text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
             Transform your workforce with AI-powered talent development. Our enterprise platform 
@@ -319,7 +318,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Enterprise-Grade AI Capabilities
+              Our AI Capabilities
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Advanced machine learning and natural language processing power every aspect of talent development
@@ -404,7 +403,7 @@ export default function Home() {
               Advanced AI Models & Infrastructure
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Enterprise-grade AI models configured via environment variables for easy deployment and testing
+              Our AI models configured via environment variables for easy deployment and testing
             </p>
           </div>
 
@@ -500,7 +499,7 @@ export default function Home() {
             href="/login"
             className="bg-white text-indigo-600 px-10 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            Access Your Enterprise Platform
+            Access Our Platform
           </Link>
         </div>
       </section>
@@ -517,8 +516,8 @@ export default function Home() {
                 <span className="ml-2 text-sm text-gray-500">(Data Science @ NTU)</span>
                 <a 
                   href="https://github.com/chanthr" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                   className="ml-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
                 >
                   GitHub →
@@ -530,8 +529,8 @@ export default function Home() {
                 <span className="ml-2 text-sm text-gray-500">(Computer Science @ NTU)</span>
                 <a 
                   href="https://github.com/ryash072007" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                   className="ml-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
                 >
                   GitHub →
@@ -543,8 +542,8 @@ export default function Home() {
                 <span className="ml-2 text-sm text-gray-500">(Computer Science @ NTU)</span>
                 <a 
                   href="https://github.com/Nestor-os" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                   className="ml-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
                 >
                   GitHub →

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
 import {
   BookOpenIcon,
@@ -14,6 +15,7 @@ import {
 
 export default function OnboardingPage() {
   const { user } = useAuth();
+  const { showErrorToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [onboardResult, setOnboardResult] = useState<{
     checklist: string[];
@@ -97,9 +99,16 @@ export default function OnboardingPage() {
         
         setOnboardResult(fallbackResult);
         initializeChecklistProgress(fallbackResult.checklist);
-        alert('Using fallback onboarding plan due to AI configuration. Contact your manager for personalized guidance.');
+        showErrorToast('Using fallback onboarding plan due to AI configuration. Contact your manager for personalized guidance.', () => {
+          const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+          handleGetOnboardInfo(mockEvent);
+        });
       } else {
-        alert('Failed to get onboarding information. Please try again.');
+        const errorMessage = error instanceof Error ? error.message : 'Failed to get onboarding information. Please try again.';
+        showErrorToast(errorMessage, () => {
+          const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+          handleGetOnboardInfo(mockEvent);
+        });
       }
     } finally {
       setIsLoading(false);
@@ -142,7 +151,7 @@ export default function OnboardingPage() {
                     rows={3}
                     value={getForm.additional_prompt}
                     onChange={(e) => setGetForm({ ...getForm, additional_prompt: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-900"
                     placeholder="e.g., focus on the analytics part, emphasize security training, include team collaboration tools"
                   />
                 </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
 import {
   PlusIcon,
@@ -15,6 +16,7 @@ import {
 
 export default function FeedbackPage() {
   const { user } = useAuth();
+  const { showErrorToast, showSuccessToast } = useToast();
   const [newFeedback, setNewFeedback] = useState('');
   const [feedbackEmail, setFeedbackEmail] = useState('');
   const [isAddingFeedback, setIsAddingFeedback] = useState(false);
@@ -47,10 +49,13 @@ export default function FeedbackPage() {
       });
       setNewFeedback('');
       setFeedbackEmail('');
-      alert('Feedback added successfully!');
+      showSuccessToast('Feedback added successfully!');
     } catch (error) {
-      console.error('Error adding feedback:', error);
-      alert('Failed to add feedback. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add feedback. Please try again.';
+      showErrorToast(errorMessage, () => {
+        const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+        handleAddFeedback(mockEvent);
+      });
     } finally {
       setIsAddingFeedback(false);
     }
@@ -65,8 +70,8 @@ export default function FeedbackPage() {
       setAnalysisResult({ type: 'classify', data: result });
       setActiveTab('classify');
     } catch (error) {
-      console.error('Error classifying feedback:', error);
-      alert('Failed to classify feedback. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to classify feedback. Please try again.';
+      showErrorToast(errorMessage, () => handleClassifyFeedback());
     } finally {
       setIsAnalyzing(false);
     }
@@ -81,8 +86,8 @@ export default function FeedbackPage() {
       setAnalysisResult({ type: 'summarise', data: result });
       setActiveTab('summarise');
     } catch (error) {
-      console.error('Error summarising feedback:', error);
-      alert('Failed to summarise feedback. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to summarise feedback. Please try again.';
+      showErrorToast(errorMessage, () => handleSummariseFeedback());
     } finally {
       setIsAnalyzing(false);
     }
@@ -157,7 +162,7 @@ export default function FeedbackPage() {
                   id="email"
                   value={feedbackEmail}
                   onChange={(e) => setFeedbackEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="Enter employee email address"
                   required
                 />
@@ -171,7 +176,7 @@ export default function FeedbackPage() {
                   rows={4}
                   value={newFeedback}
                   onChange={(e) => setNewFeedback(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="Enter your feedback here..."
                   required
                 />

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient, createSkill } from '@/lib/api';
+import { useToast } from '@/components/Toast';
 import { 
   CogIcon, 
   PlusIcon,
@@ -31,6 +32,7 @@ interface SkillFormData {
 
 export default function AdminPage() {
   const { user } = useAuth();
+  const { showErrorToast, showSuccessToast } = useToast();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'onboard' | 'skill'>('onboard');
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +83,7 @@ export default function AdminPage() {
         resources
       });
 
-      setSuccessMessage('Onboarding item created successfully!');
+      showSuccessToast('Onboarding item created successfully!');
       setOnboardForm({
         title: '',
         specialization: '',
@@ -90,8 +92,11 @@ export default function AdminPage() {
         resources: ''
       });
     } catch (error) {
-      console.error('Error creating onboarding item:', error);
-      setErrorMessage('Failed to create onboarding item. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create onboarding item. Please try again.';
+      showErrorToast(errorMessage, () => {
+        const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+        handleOnboardSubmit(mockEvent);
+      });
     } finally {
       setIsLoading(false);
     }
@@ -118,7 +123,7 @@ export default function AdminPage() {
         url: skillForm.url
       });
 
-      setSuccessMessage('Skill item created successfully!');
+      showSuccessToast('Skill item created successfully!');
       setSkillForm({
         title: '',
         tags: '',
@@ -126,8 +131,11 @@ export default function AdminPage() {
         url: ''
       });
     } catch (error) {
-      console.error('Error creating skill item:', error);
-      setErrorMessage('Failed to create skill item. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create skill item. Please try again.';
+      showErrorToast(errorMessage, () => {
+        const mockEvent = { preventDefault: () => {} } as React.FormEvent;
+        handleSkillSubmit(mockEvent);
+      });
     } finally {
       setIsLoading(false);
     }
@@ -237,7 +245,7 @@ export default function AdminPage() {
                     id="title"
                     value={onboardForm.title}
                     onChange={(e) => setOnboardForm({...onboardForm, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     placeholder="e.g., Software Engineer"
                     required
                   />
@@ -252,7 +260,7 @@ export default function AdminPage() {
                     id="specialization"
                     value={onboardForm.specialization}
                     onChange={(e) => setOnboardForm({...onboardForm, specialization: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     placeholder="e.g., Backend, Frontend, DevOps"
                     required
                   />
@@ -268,7 +276,7 @@ export default function AdminPage() {
                   id="tags"
                   value={onboardForm.tags}
                   onChange={(e) => setOnboardForm({...onboardForm, tags: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="e.g., python, django, api, database"
                 />
               </div>
@@ -281,7 +289,7 @@ export default function AdminPage() {
                   id="checklist"
                   value={onboardForm.checklist}
                   onChange={(e) => setOnboardForm({...onboardForm, checklist: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-32"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-32 text-gray-900"
                   placeholder="Collect laptop from IT&#10;Complete coding assessment&#10;Review company policies&#10;Setup development environment"
                 />
               </div>
@@ -294,7 +302,7 @@ export default function AdminPage() {
                   id="resources"
                   value={onboardForm.resources}
                   onChange={(e) => setOnboardForm({...onboardForm, resources: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-32"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 h-32 text-gray-900"
                   placeholder="https://docs.djangoproject.com/&#10;https://www.python.org/&#10;Backend service map"
                 />
               </div>
@@ -339,7 +347,7 @@ export default function AdminPage() {
                     id="skill-title"
                     value={skillForm.title}
                     onChange={(e) => setSkillForm({...skillForm, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     placeholder="e.g., Python Programming"
                     required
                   />
@@ -353,7 +361,7 @@ export default function AdminPage() {
                     id="type"
                     value={skillForm.type}
                     onChange={(e) => setSkillForm({...skillForm, type: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     required
                   >
                     <option value="">Select type</option>
@@ -377,7 +385,7 @@ export default function AdminPage() {
                   id="skill-tags"
                   value={skillForm.tags}
                   onChange={(e) => setSkillForm({...skillForm, tags: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="e.g., python, programming, beginner, data-science"
                 />
               </div>
@@ -391,7 +399,7 @@ export default function AdminPage() {
                   id="url"
                   value={skillForm.url}
                   onChange={(e) => setSkillForm({...skillForm, url: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="https://example.com/python-tutorial"
                   required
                 />
