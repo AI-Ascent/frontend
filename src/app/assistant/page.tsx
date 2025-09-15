@@ -232,14 +232,11 @@ export default function AssistantPage() {
               <span className="text-sm text-gray-600">Processing your request...</span>
               <span className="text-sm font-medium text-purple-600">{Math.round(progress)}%</span>
             </div>
-            <p className="text-center text-gray-600 text-sm">
-              This may take up to 45 seconds as the coordinator analyzes your question and gathers insights from all specialized agents.
-            </p>
           </div>
         )}
 
         {/* Query Form */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-gray-200/50 p-8 mb-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-gray-200/50 p-4 sm:p-8 mb-8">
           <div className="space-y-6">
             <div>
               <label htmlFor="query" className="block text-lg font-semibold text-gray-900 mb-3">
@@ -251,7 +248,7 @@ export default function AssistantPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="e.g., What skills should I develop for my role? How can I improve my communication? What should I focus on in my onboarding?"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 h-32 resize-none text-gray-900 placeholder-gray-400 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 h-32 resize-none text-gray-900 placeholder-gray-400 transition-all duration-200 text-base"
                 disabled={isLoading}
               />
             </div>
@@ -259,7 +256,7 @@ export default function AssistantPage() {
             <button
               onClick={handleAskCoordinator}
               disabled={isLoading || !user?.email || !query.trim()}
-              className="w-full flex items-center justify-center px-6 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+              className="w-full flex items-center justify-center px-4 sm:px-6 py-3 sm:py-4 border border-transparent text-base sm:text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
               {isLoading ? (
                 <>
@@ -278,6 +275,41 @@ export default function AssistantPage() {
             </button>
           </div>
         </div>
+
+        {/* Example Questions */}
+        {chatHistory.length === 0 && (
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-gray-200/50 p-4 sm:p-8 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Example Questions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                "What skills should I develop for my current role?",
+                "How can I improve my communication skills?",
+                "What should I focus on during my onboarding?",
+                "Can you help me find mentors for my career growth?",
+                "What are my strengths based on recent feedback?",
+                "How can I advance to the next level in my career?",
+                "What learning resources do you recommend for me?",
+                "How can I improve my leadership abilities?"
+              ].map((example, index) => (
+                <button
+                  key={index}
+                  onClick={() => setQuery(example)}
+                  className="p-4 text-left bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-purple-200 rounded-lg transition-all duration-200 group"
+                >
+                  <div className="flex items-start">
+                    <SparklesIcon className="h-5 w-5 text-purple-600 mr-3 mt-0.5 flex-shrink-0 group-hover:text-purple-700" />
+                    <span className="text-gray-700 group-hover:text-purple-700 text-sm leading-relaxed">
+                      {example}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="text-center text-gray-500 text-sm mt-4">
+              Click any question above to get started, or type your own question
+            </p>
+          </div>
+        )}
 
         {/* Results */}
         {chatHistory.length > 0 && chatHistory[chatHistory.length - 1]?.type === 'assistant' && (

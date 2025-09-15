@@ -114,33 +114,33 @@ export default function FeedbackPage() {
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8 justify-center">
+          <nav className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-8 justify-center">
             <button
               onClick={() => setActiveTab('add')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-3 px-4 sm:py-2 sm:px-1 border-b-2 font-medium text-sm sm:text-sm rounded-lg sm:rounded-none ${
                 activeTab === 'add'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-blue-500 text-blue-600 bg-blue-50 sm:bg-transparent'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 sm:hover:bg-transparent'
               }`}
             >
               Add Feedback
             </button>
             <button
               onClick={() => setActiveTab('classify')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-3 px-4 sm:py-2 sm:px-1 border-b-2 font-medium text-sm sm:text-sm rounded-lg sm:rounded-none ${
                 activeTab === 'classify'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-blue-500 text-blue-600 bg-blue-50 sm:bg-transparent'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 sm:hover:bg-transparent'
               }`}
             >
               Classify Feedback
             </button>
             <button
               onClick={() => setActiveTab('summarise')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-3 px-4 sm:py-2 sm:px-1 border-b-2 font-medium text-sm sm:text-sm rounded-lg sm:rounded-none ${
                 activeTab === 'summarise'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-blue-500 text-blue-600 bg-blue-50 sm:bg-transparent'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 sm:hover:bg-transparent'
               }`}
             >
               Summarise Feedback

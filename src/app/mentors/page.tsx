@@ -129,18 +129,18 @@ export default function MentorsPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0 mr-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start">
+                        <div className="flex-shrink-0 mr-0 sm:mr-4 mb-3 sm:mb-0">
                           <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
                             <UserGroupIcon className="h-6 w-6 text-blue-600" />
                           </div>
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
                             <h3 className="text-lg font-semibold text-gray-900">
                               {mentor.job_title || 'Mentor'}
                             </h3>
-                            <div className="flex items-center">
+                            <div className="flex items-center mt-1 sm:mt-0">
                               <StarIcon className="h-4 w-4 text-yellow-500 mr-1" />
                               <span className="text-sm text-gray-600">Recommended</span>
                             </div>

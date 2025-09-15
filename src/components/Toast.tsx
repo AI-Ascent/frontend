@@ -141,11 +141,11 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {children}
       
       {/* Toast Container */}
-      <div className="fixed top-4 right-4 z-50 space-y-2">
+      <div className="fixed top-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 space-y-2">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`max-w-sm w-full bg-white border-l-4 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden ${getToastStyles(toast.type)}`}
+            className={`w-full bg-white border-l-4 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden ${getToastStyles(toast.type)}`}
           >
             <div className="p-4">
               <div className="flex items-start">
@@ -154,7 +154,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
                   <p className="text-sm font-medium">{toast.title}</p>
-                  <p className="mt-1 text-sm opacity-90">{toast.message}</p>
+                  <p className="mt-1 text-sm opacity-90 break-words">{toast.message}</p>
                   {toast.action && (
                     <div className="mt-3">
                       <button

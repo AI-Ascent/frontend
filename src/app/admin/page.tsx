@@ -174,25 +174,27 @@ export default function AdminPage() {
             <nav className="-mb-px flex">
               <button
                 onClick={() => setActiveTab('onboard')}
-                className={`w-1/2 py-6 px-8 text-center border-b-3 font-semibold text-base transition-all duration-200 ${
+                className={`w-1/2 py-4 sm:py-6 px-4 sm:px-8 text-center border-b-3 font-semibold text-sm sm:text-base transition-all duration-200 ${
                   activeTab === 'onboard'
                     ? 'border-indigo-500 text-indigo-600 bg-indigo-50/50'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50/50'
                 }`}
               >
-                <DocumentTextIcon className="h-6 w-6 mx-auto mb-3" />
-                Onboarding Catalogs
+                <DocumentTextIcon className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 sm:mb-3" />
+                <span className="hidden sm:block">Onboarding Catalogs</span>
+                <span className="sm:hidden">Onboarding</span>
               </button>
               <button
                 onClick={() => setActiveTab('skill')}
-                className={`w-1/2 py-6 px-8 text-center border-b-3 font-semibold text-base transition-all duration-200 ${
+                className={`w-1/2 py-4 sm:py-6 px-4 sm:px-8 text-center border-b-3 font-semibold text-sm sm:text-base transition-all duration-200 ${
                   activeTab === 'skill'
                     ? 'border-indigo-500 text-indigo-600 bg-indigo-50/50'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50/50'
                 }`}
               >
-                <AcademicCapIcon className="h-6 w-6 mx-auto mb-3" />
-                Skill Catalogs
+                <AcademicCapIcon className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 sm:mb-3" />
+                <span className="hidden sm:block">Skill Catalogs</span>
+                <span className="sm:hidden">Skills</span>
               </button>
             </nav>
           </div>

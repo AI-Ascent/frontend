@@ -39,7 +39,7 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/dashboard" className="flex items-center group">
-              <div className="relative h-10 w-auto rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
+              <div className="relative h-7 w-7 sm:h-10 sm:w-10 rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
                 <Image
                   src="/images/logo.png"
                   alt="AI Ascent Logo"
@@ -49,7 +49,7 @@ export default function Navigation() {
                   priority
                 />
               </div>
-              <span className="ml-3 text-xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors duration-300">
+              <span className="ml-1.5 sm:ml-3 text-sm sm:text-xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors duration-300">
                 AI Ascent
               </span>
             </Link>
@@ -92,15 +92,15 @@ export default function Navigation() {
           </div>
 
           {/* User Menu */}
-          <div className="flex items-center space-x-3 flex-shrink-0 ml-4">
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 ml-2 sm:ml-4">
             <div className="hidden lg:block text-right">
               <p className="text-sm font-medium text-gray-900">{user?.name}</p>
               <p className="text-xs text-gray-500">{user?.email}</p>
             </div>
             
             <div className="relative">
-              <div className="h-9 w-9 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center shadow-sm">
-                <span className="text-sm font-medium text-indigo-600">
+              <div className="h-8 w-8 sm:h-9 sm:w-9 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center shadow-sm">
+                <span className="text-xs sm:text-sm font-medium text-indigo-600">
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -116,12 +116,12 @@ export default function Navigation() {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className="md:hidden p-1.5 sm:p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
               {mobileMenuOpen ? (
-                <XMarkIcon className="h-6 w-6" />
+                <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               ) : (
-                <Bars3Icon className="h-6 w-6" />
+                <Bars3Icon className="h-5 w-5 sm:h-6 sm:w-6" />
               )}
             </button>
           </div>
