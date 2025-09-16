@@ -35,6 +35,8 @@ export default function LoginPage() {
         setTimeout(() => {
           router.push('/dashboard');
         }, 1000);
+      } else {
+        showErrorToast('Login unsuccessful. Please check your email and password.', () => handleSubmit(e));
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';
