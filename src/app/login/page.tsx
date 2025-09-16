@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { login, isAuthenticated, isLoading } = useAuth();
-  const { showErrorToast } = useToast();
+  const { showErrorToast, showSuccessToast } = useToast();
   const router = useRouter();
 
   // Redirect if already authenticated
@@ -30,7 +30,11 @@ export default function LoginPage() {
     try {
       const success = await login(email, password);
       if (success) {
-        router.push('/dashboard');
+        showSuccessToast('Login successful! Welcome back.');
+        // Small delay to show the success toast before redirecting
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';

@@ -141,25 +141,33 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {children}
       
       {/* Toast Container */}
-      <div className="fixed top-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 space-y-2">
+      <div className="fixed top-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 space-y-2 max-h-screen overflow-y-auto">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`w-full bg-white border-l-4 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden ${getToastStyles(toast.type)}`}
+            className={`w-full bg-white border-l-4 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 ${getToastStyles(toast.type)}`}
+            style={{ 
+              wordWrap: 'break-word', 
+              overflowWrap: 'break-word',
+              whiteSpace: 'normal',
+              writingMode: 'horizontal-tb',
+              textOrientation: 'mixed'
+            }}
           >
             <div className="p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   {getToastIcon(toast.type)}
                 </div>
-                <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-medium">{toast.title}</p>
-                  <p className="mt-1 text-sm opacity-90 break-words">{toast.message}</p>
+                <div className="ml-3 flex-1 pt-0.5" style={{ minWidth: 0, maxWidth: '100%' }}>
+                  <p className="text-sm font-medium" style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{toast.title}</p>
+                  <p className="mt-1 text-sm opacity-90" style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{toast.message}</p>
                   {toast.action && (
                     <div className="mt-3">
                       <button
                         onClick={toast.action.onClick}
                         className="text-sm font-medium hover:underline focus:outline-none focus:underline"
+                        style={{ whiteSpace: 'normal' }}
                       >
                         {toast.action.label}
                       </button>
