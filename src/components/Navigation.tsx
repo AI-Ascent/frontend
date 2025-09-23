@@ -14,6 +14,7 @@ import {
   SparklesIcon,
   Bars3Icon,
   XMarkIcon,
+  HeartIcon,
 } from '@heroicons/react/24/outline';
 
 export default function Navigation() {
@@ -26,6 +27,7 @@ export default function Navigation() {
     { name: 'Feedback', href: '/feedback', icon: ChatBubbleLeftRightIcon },
     { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
     { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
+    { name: 'Interested', href: '/interested-skills', icon: HeartIcon },
     { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
     { name: 'Ask', href: '/assistant', icon: SparklesIcon },
   ];

@@ -9,6 +9,7 @@ interface User {
   email: string;
   job_title: string;
   specialization: string;
+  is_admin: boolean;
   name?: string; // For backward compatibility
 }
 
@@ -73,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: response.user.email,
           job_title: response.user.job_title,
           specialization: response.user.specialization,
+          is_admin: response.user.is_admin,
           name: response.user.email.split('@')[0], // For backward compatibility
         };
         

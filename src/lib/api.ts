@@ -18,6 +18,7 @@ export interface LoginResponse {
     email: string;
     job_title: string;
     specialization: string;
+    is_admin: boolean;
   };
 }
 
@@ -135,6 +136,198 @@ export interface CoordinatorAskResponse {
   message: string;
   action_items: string[];
   resources: string[];
+}
+
+// Onboarding Management
+export interface UpdateOnboardItemRequest {
+  id: number;
+  title?: string;
+  specialization?: string;
+  tags?: string[];
+  checklist?: string[];
+  resources?: string[];
+}
+
+export interface UpdateOnboardItemResponse {
+  message: string;
+  id: number;
+  data: {
+    id: number;
+    title: string;
+    specialization: string;
+    tags: string[];
+    checklist: string[];
+    resources: string[];
+  };
+}
+
+export interface ListOnboardItemsRequest {
+  index_start: number;
+  index_end: number;
+}
+
+export type ListOnboardItemsResponse = Array<{
+  id: number;
+  title: string;
+  specialization: string;
+}>;
+
+export interface DeleteOnboardItemRequest {
+  id: number;
+}
+
+export interface DeleteOnboardItemResponse {
+  message: string;
+}
+
+export interface FinalizeOnboardResponse {
+  message: string;
+}
+
+export interface MarkChecklistItemRequest {
+  checklist_item: string;
+}
+
+export interface MarkChecklistItemResponse {
+  message: string;
+}
+
+export interface CheckOnboardFinalizationResponse {
+  finalized: boolean;
+}
+
+export interface GetFinalizedOnboardResponse {
+  onboard_data: {
+    checklist: string[];
+    resources: string[];
+    explanation: string;
+  };
+  completed_items: string[];
+}
+
+// Skill Management
+export interface UpdateSkillItemRequest {
+  id: number;
+  title?: string;
+  tags?: string[];
+  type?: string;
+  url?: string;
+}
+
+export interface UpdateSkillItemResponse {
+  message: string;
+  id: number;
+  data: {
+    id: number;
+    title: string;
+    tags: string[];
+    type: string;
+    url: string;
+  };
+}
+
+export interface ListSkillItemsRequest {
+  index_start: number;
+  index_end: number;
+}
+
+export type ListSkillItemsResponse = Array<{
+  id: number;
+  title: string;
+  type: string;
+  url: string;
+}>;
+
+export interface DeleteSkillItemRequest {
+  id: number;
+}
+
+export interface DeleteSkillItemResponse {
+  message: string;
+}
+
+// Interested Skills
+export interface AddInterestedSkillRequest {
+  skill_title: string;
+  skill_description: string;
+  learning_outcomes: string[];
+  resources: Array<{
+    title: string;
+    url: string;
+    type: string;
+  }>;
+}
+
+export interface AddInterestedSkillResponse {
+  message: string;
+  interested_skill_id: number;
+}
+
+export interface GetInterestedSkillsResponse {
+  skills: Array<{
+    id: number;
+    skill_title: string;
+    skill_description: string;
+    learning_outcomes: string[];
+    resources: Array<{
+      title: string;
+      url: string;
+      type: string;
+    }>;
+    set_at: string;
+  }>;
+}
+
+export interface DeleteInterestedSkillRequest {
+  id: number;
+}
+
+export interface DeleteInterestedSkillResponse {
+  message: string;
+}
+
+// Admin Features
+export interface GlobalSkillTrendsRequest {
+  timeframe_days?: number;
+  top_n?: number;
+}
+
+export interface GlobalSkillTrendsResponse {
+  computed_at: string;
+  timeframe_days: number;
+  clusters: Array<{
+    representative_title: string;
+    popularity_users: number;
+    sample_titles: string[];
+  }>;
+}
+
+export interface GlobalNegativeFeedbackTrendsRequest {
+  timeframe_days?: number;
+  top_n?: number;
+}
+
+export interface GlobalNegativeFeedbackTrendsResponse {
+  computed_at: string;
+  timeframe_days: number;
+  clusters: Array<{
+    representative_feedback: string;
+    popularity_users: number;
+    sample_feedbacks: string[];
+  }>;
+}
+
+export interface KPIResponse {
+  data: Array<{
+    year: number;
+    month: number;
+    completed_onboard_tasks: number;
+    assigned_onboard_tasks: number;
+    prompt_injection_count: number;
+    flagged_feedbacks_count: number;
+    total_feedbacks_count: number;
+    pii_redacted_count: number;
+  }>;
 }
 
 export interface ApiError {
@@ -311,6 +504,118 @@ class ApiClient {
     });
   }
 
+  // Onboarding Management (Admin)
+  async updateOnboardItem(data: UpdateOnboardItemRequest): Promise<UpdateOnboardItemResponse> {
+    return this.request<UpdateOnboardItemResponse>('/onboard/update/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async listOnboardItems(data: ListOnboardItemsRequest): Promise<ListOnboardItemsResponse> {
+    return this.request<ListOnboardItemsResponse>('/onboard/list/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteOnboardItem(data: DeleteOnboardItemRequest): Promise<DeleteOnboardItemResponse> {
+    return this.request<DeleteOnboardItemResponse>('/onboard/delete/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Onboarding User Features
+  async finalizeOnboard(): Promise<FinalizeOnboardResponse> {
+    return this.request<FinalizeOnboardResponse>('/onboard/finalize/', {
+      method: 'POST',
+    });
+  }
+
+  async markChecklistItem(data: MarkChecklistItemRequest): Promise<MarkChecklistItemResponse> {
+    return this.request<MarkChecklistItemResponse>('/onboard/mark-checklist-item/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async checkOnboardFinalization(): Promise<CheckOnboardFinalizationResponse> {
+    return this.request<CheckOnboardFinalizationResponse>('/onboard/check/', {
+      method: 'POST',
+    });
+  }
+
+  async getFinalizedOnboard(): Promise<GetFinalizedOnboardResponse> {
+    return this.request<GetFinalizedOnboardResponse>('/onboard/finalized/', {
+      method: 'POST',
+    });
+  }
+
+  // Skill Management (Admin)
+  async updateSkillItem(data: UpdateSkillItemRequest): Promise<UpdateSkillItemResponse> {
+    return this.request<UpdateSkillItemResponse>('/update-skill/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async listSkillItems(data: ListSkillItemsRequest): Promise<ListSkillItemsResponse> {
+    return this.request<ListSkillItemsResponse>('/list-skill/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteSkillItem(data: DeleteSkillItemRequest): Promise<DeleteSkillItemResponse> {
+    return this.request<DeleteSkillItemResponse>('/delete-skill/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Interested Skills
+  async addInterestedSkill(data: AddInterestedSkillRequest): Promise<AddInterestedSkillResponse> {
+    return this.request<AddInterestedSkillResponse>('/interested/add/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getInterestedSkills(): Promise<GetInterestedSkillsResponse> {
+    return this.request<GetInterestedSkillsResponse>('/interested/list/', {
+      method: 'POST',
+    });
+  }
+
+  async deleteInterestedSkill(data: DeleteInterestedSkillRequest): Promise<DeleteInterestedSkillResponse> {
+    return this.request<DeleteInterestedSkillResponse>('/interested/delete/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Admin Features
+  async getGlobalSkillTrends(data?: GlobalSkillTrendsRequest): Promise<GlobalSkillTrendsResponse> {
+    return this.request<GlobalSkillTrendsResponse>('/global-skill-trends/', {
+      method: 'POST',
+      body: JSON.stringify(data || {}),
+    });
+  }
+
+  async getGlobalNegativeFeedbackTrends(data?: GlobalNegativeFeedbackTrendsRequest): Promise<GlobalNegativeFeedbackTrendsResponse> {
+    return this.request<GlobalNegativeFeedbackTrendsResponse>('/global-negative-feedback-trends/', {
+      method: 'POST',
+      body: JSON.stringify(data || {}),
+    });
+  }
+
+  async getKPIData(): Promise<KPIResponse> {
+    return this.request<KPIResponse>('/kpi/', {
+      method: 'POST',
+    });
+  }
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     return this.request<{ status: string }>('/health/', {
@@ -329,8 +634,24 @@ export const classifyFeedback = apiClient.classifyFeedback.bind(apiClient);
 export const summariseFeedback = apiClient.summariseFeedback.bind(apiClient);
 export const getOnboardInfo = apiClient.getOnboardInfo.bind(apiClient);
 export const createOnboardItem = apiClient.createOnboardItem.bind(apiClient);
+export const updateOnboardItem = apiClient.updateOnboardItem.bind(apiClient);
+export const listOnboardItems = apiClient.listOnboardItems.bind(apiClient);
+export const deleteOnboardItem = apiClient.deleteOnboardItem.bind(apiClient);
+export const finalizeOnboard = apiClient.finalizeOnboard.bind(apiClient);
+export const markChecklistItem = apiClient.markChecklistItem.bind(apiClient);
+export const checkOnboardFinalization = apiClient.checkOnboardFinalization.bind(apiClient);
+export const getFinalizedOnboard = apiClient.getFinalizedOnboard.bind(apiClient);
 export const createSkill = apiClient.createSkill.bind(apiClient);
+export const updateSkillItem = apiClient.updateSkillItem.bind(apiClient);
+export const listSkillItems = apiClient.listSkillItems.bind(apiClient);
+export const deleteSkillItem = apiClient.deleteSkillItem.bind(apiClient);
 export const getSkillRecommendations = apiClient.getSkillRecommendations.bind(apiClient);
+export const addInterestedSkill = apiClient.addInterestedSkill.bind(apiClient);
+export const getInterestedSkills = apiClient.getInterestedSkills.bind(apiClient);
+export const deleteInterestedSkill = apiClient.deleteInterestedSkill.bind(apiClient);
 export const findMentors = apiClient.findMentors.bind(apiClient);
 export const coordinatorAsk = apiClient.coordinatorAsk.bind(apiClient);
+export const getGlobalSkillTrends = apiClient.getGlobalSkillTrends.bind(apiClient);
+export const getGlobalNegativeFeedbackTrends = apiClient.getGlobalNegativeFeedbackTrends.bind(apiClient);
+export const getKPIData = apiClient.getKPIData.bind(apiClient);
 export const healthCheck = apiClient.healthCheck.bind(apiClient);

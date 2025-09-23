@@ -11,6 +11,7 @@ import {
   ChatBubbleLeftRightIcon,
   ClipboardDocumentListIcon,
   SparklesIcon,
+  HeartIcon,
 } from '@heroicons/react/24/outline';
 
 export default function DashboardPage() {
@@ -58,6 +59,13 @@ export default function DashboardPage() {
       color: 'bg-purple-500',
     },
     {
+      title: 'Interested Skills',
+      description: 'Track skills you want to learn and build your learning roadmap',
+      icon: HeartIcon,
+      href: '/interested-skills',
+      color: 'bg-pink-500',
+    },
+    {
       title: 'Find Mentors',
       description: 'Discover mentors whose strengths match your improvement areas',
       icon: UserGroupIcon,
@@ -69,7 +77,7 @@ export default function DashboardPage() {
       description: 'Master AI coordinator that leverages all specialized agents (feedback analysis, skill recommendations, mentor matching, onboarding) to provide comprehensive, personalized career guidance',
       icon: SparklesIcon,
       href: '/assistant',
-      color: 'bg-pink-500',
+      color: 'bg-orange-500',
     },
   ];
 
