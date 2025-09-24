@@ -2,18 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getSkillRecommendations } from '@/lib/api';
+import { getSkillRecommendations, addInterestedSkill } from '@/lib/api';
 import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
 import {
   AcademicCapIcon,
   LinkIcon,
   SparklesIcon,
+  HeartIcon,
 } from '@heroicons/react/24/outline';
 
 export default function SkillsPage() {
   const { user } = useAuth();
-  const { showErrorToast } = useToast();
+  const { showErrorToast, showSuccessToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressInterval, setProgressInterval] = useState<NodeJS.Timeout | null>(null);
@@ -101,6 +102,37 @@ export default function SkillsPage() {
       });
       setIsLoading(false);
       stopProgressBar();
+    }
+  };
+
+  const handleAddToInterestedList = async (skill: {
+    title: string;
+    description: string;
+    learning_outcomes: string[];
+    resources: Array<{
+      title: string;
+      url: string;
+      type: string;
+    }>;
+  }) => {
+    if (!user?.email) {
+      showErrorToast('User not authenticated');
+      return;
+    }
+
+    try {
+      const requestData = {
+        skill_title: skill.title,
+        skill_description: skill.description,
+        learning_outcomes: skill.learning_outcomes,
+        resources: skill.resources,
+      };
+
+      await addInterestedSkill(requestData);
+      showSuccessToast('Skill added to your interested list!');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add skill to interested list.';
+      showErrorToast(errorMessage);
     }
   };
 
@@ -197,7 +229,16 @@ export default function SkillsPage() {
                 <div className="space-y-6">
                   {skillResult.skills?.map((skill, index) => (
                     <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-3">{skill.title}</h4>
+                      <div className="flex justify-between items-start mb-3">
+                        <h4 className="text-lg font-semibold text-gray-900">{skill.title}</h4>
+                        <button
+                          onClick={() => handleAddToInterestedList(skill)}
+                          className="inline-flex items-center px-3 py-1 text-sm font-medium text-pink-600 bg-pink-100 hover:bg-pink-200 rounded-lg transition-colors duration-200"
+                        >
+                          <HeartIcon className="h-4 w-4 mr-1" />
+                          Add to your list
+                        </button>
+                      </div>
                       <p className="text-gray-600 mb-4">{skill.description}</p>
                       
                       <div className="space-y-4">

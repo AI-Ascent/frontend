@@ -230,17 +230,15 @@ export default function OnboardingPage() {
 
         {/* Get Personalized Onboarding */}
         <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                {isFinalized ? 'Update Onboarding Plan' : 'Get Personalized Onboarding'}
-              </h2>
-              <p className="text-sm text-gray-600 mb-4">
-                {isFinalized 
-                  ? 'Get updated AI-powered onboarding recommendations or check your current progress.'
-                  : 'Get AI-powered onboarding recommendations based on your role and specialization.'
-                }
-              </p>
-              <form onSubmit={handleGetOnboardInfo} className="space-y-4">
+            {!isFinalized && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  Get Personalized Onboarding
+                </h2>
+                <p className="text-sm text-gray-600 mb-4">
+                  Get AI-powered onboarding recommendations based on your role and specialization.
+                </p>
+                <form onSubmit={handleGetOnboardInfo} className="space-y-4">
                 <div>
                   <label htmlFor="additional_prompt" className="block text-sm font-medium text-gray-700 mb-2">
                     Additional Context (Optional)
@@ -267,12 +265,13 @@ export default function OnboardingPage() {
                   ) : (
                     <>
                       <SparklesIcon className="h-4 w-4 mr-2" />
-                      {isFinalized ? 'Update Onboarding Plan' : 'Get Onboarding Plan'}
+                      Get Onboarding Plan
                     </>
                   )}
                 </button>
               </form>
             </div>
+            )}
 
             {/* Onboarding Results */}
             {onboardResult && (
@@ -356,7 +355,7 @@ export default function OnboardingPage() {
                     </div>
                     
                     {/* Finalize Button */}
-                    {onboardResult && (
+                    {onboardResult && !isFinalized && (
                       <div className="mt-6 pt-4 border-t border-gray-200">
                         <button
                           onClick={handleFinalizeOnboard}
@@ -366,21 +365,18 @@ export default function OnboardingPage() {
                           {isLoading ? (
                             <>
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                              {isFinalized ? 'Updating...' : 'Finalizing...'}
+                              Finalizing...
                             </>
                           ) : (
                             <>
                               <TrophyIcon className="h-5 w-5 mr-2" />
-                              {isFinalized 
-                                ? `Update Finalization (${getProgressPercentage()}% Complete)`
-                                : `Finalize Onboarding (${getProgressPercentage()}% Complete)`
-                              }
+                              Finalize Onboarding ({getProgressPercentage()}% Complete)
                             </>
                           )}
                         </button>
                         {getProgressPercentage() < 50 && (
                           <p className="mt-2 text-sm text-gray-500 text-center">
-                            Complete at least 50% of tasks to {isFinalized ? 'update' : 'finalize'} onboarding
+                            Complete at least 50% of tasks to finalize onboarding
                           </p>
                         )}
                       </div>
