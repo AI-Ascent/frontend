@@ -359,7 +359,7 @@ export default function OnboardingPage() {
                       <div className="mt-6 pt-4 border-t border-gray-200">
                         <button
                           onClick={handleFinalizeOnboard}
-                          disabled={isLoading || getProgressPercentage() < 50}
+                          disabled={isLoading || getProgressPercentage() < 100}
                           className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200"
                         >
                           {isLoading ? (
@@ -374,9 +374,9 @@ export default function OnboardingPage() {
                             </>
                           )}
                         </button>
-                        {getProgressPercentage() < 50 && (
+                        {getProgressPercentage() < 100 && (
                           <p className="mt-2 text-sm text-gray-500 text-center">
-                            Complete at least 50% of tasks to finalize onboarding
+                            Complete all tasks to finalize onboarding
                           </p>
                         )}
                       </div>

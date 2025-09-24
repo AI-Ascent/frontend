@@ -11,6 +11,7 @@ import {
   ArrowTrendingDownIcon,
   UsersIcon,
   ExclamationTriangleIcon,
+  ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
 
 interface KPIData {
@@ -45,6 +46,8 @@ export default function AdminDashboardPage() {
   const [feedbackTrends, setFeedbackTrends] = useState<FeedbackTrend[]>([]);
   const [activeTab, setActiveTab] = useState<'kpi' | 'skills' | 'feedback'>('kpi');
 
+  console.log('AdminDashboardPage loaded, isAdminAuthenticated:', isAdminAuthenticated);
+
   // Check admin authentication
   useEffect(() => {
     if (!isAdminAuthenticated) {
@@ -62,11 +65,16 @@ export default function AdminDashboardPage() {
   const loadAllData = async () => {
     setIsLoading(true);
     try {
+      console.log('Loading admin dashboard data...');
       const [kpi, skills, feedback] = await Promise.all([
         getKPIData(),
         getGlobalSkillTrends({ timeframe_days: 7, top_n: 10 }),
         getGlobalNegativeFeedbackTrends({ timeframe_days: 7, top_n: 10 })
       ]);
+      
+      console.log('KPI Data:', kpi);
+      console.log('Skill Trends:', skills);
+      console.log('Feedback Trends:', feedback);
       
       setKpiData(kpi.data);
       setSkillTrends(skills.clusters);
@@ -104,17 +112,28 @@ export default function AdminDashboardPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-slate-600 to-gray-600 rounded-full mb-6 shadow-lg">
-            <ChartBarIcon className="h-10 w-10 text-white" />
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <button
+              onClick={() => router.push('/admin')}
+              className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <ArrowLeftIcon className="h-4 w-4 mr-2" />
+              Back to Admin
+            </button>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent mb-4">
-            Admin Dashboard
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Monitor organizational performance, skill trends, and feedback analytics 
-            with comprehensive KPI tracking and insights.
-          </p>
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-slate-600 to-gray-600 rounded-full mb-6 shadow-lg">
+              <ChartBarIcon className="h-10 w-10 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent mb-4">
+              Admin Dashboard
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Monitor organizational performance, skill trends, and feedback analytics 
+              with comprehensive KPI tracking and insights.
+            </p>
+          </div>
         </div>
 
         {/* Tab Navigation */}

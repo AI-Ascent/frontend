@@ -22,15 +22,17 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Feedback', href: '/feedback', icon: ChatBubbleLeftRightIcon },
-    { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
-    { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
-    { name: 'Interested', href: '/interested-skills', icon: HeartIcon },
-    { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
-    { name: 'Ask', href: '/assistant', icon: SparklesIcon },
-  ];
+  const navigation = user?.is_admin 
+    ? []
+    : [
+        { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+        { name: 'Feedback', href: '/feedback', icon: ChatBubbleLeftRightIcon },
+        { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
+        { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
+        { name: 'Interested', href: '/interested-skills', icon: HeartIcon },
+        { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
+        { name: 'Ask', href: '/assistant', icon: SparklesIcon },
+      ];
 
   const isActive = (href: string) => pathname === href;
 
@@ -40,7 +42,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
-            <Link href="/dashboard" className="flex items-center group">
+            <Link href={user?.is_admin ? "/admin" : "/dashboard"} className="flex items-center group">
               <div className="relative h-7 w-7 sm:h-10 sm:w-10 rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
                 <Image
                   src="/images/logo.png"

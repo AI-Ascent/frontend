@@ -19,6 +19,7 @@ import {
   TagIcon,
   LinkIcon,
   BookOpenIcon,
+  ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
 
 interface SkillItem {
@@ -31,7 +32,7 @@ interface SkillItem {
 
 export default function AdminSkillsPage() {
   const router = useRouter();
-  const { isAdminAuthenticated, logoutAdmin } = useAdminAuth();
+  const { isAdminAuthenticated } = useAdminAuth();
   const { showErrorToast, showSuccessToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [skillItems, setSkillItems] = useState<SkillItem[]>([]);
@@ -49,7 +50,7 @@ export default function AdminSkillsPage() {
   // Check admin authentication
   useEffect(() => {
     if (!isAdminAuthenticated) {
-      router.push('/admin-login');
+      router.push('/dashboard');
     }
   }, [isAdminAuthenticated, router]);
 
@@ -188,11 +189,6 @@ export default function AdminSkillsPage() {
     }
   };
 
-  const handleLogout = () => {
-    logoutAdmin();
-    router.push('/admin-login');
-  };
-
   const resetForm = () => {
     setFormData({
       title: '',
@@ -214,28 +210,23 @@ export default function AdminSkillsPage() {
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <button
+              onClick={() => router.push('/admin')}
+              className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <ArrowLeftIcon className="h-4 w-4 mr-2" />
+              Back to Admin
+            </button>
+          </div>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent mb-4">
               Skill Management
             </h1>
-            <p className="text-gray-600">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Manage skill catalog items with learning resources
             </p>
-          </div>
-          <div className="flex gap-4">
-            <button
-              onClick={() => router.push('/admin-dashboard')}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Logout
-            </button>
           </div>
         </div>
 

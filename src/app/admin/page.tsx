@@ -13,19 +13,14 @@ import {
 
 export default function AdminPage() {
   const router = useRouter();
-  const { isAdminAuthenticated, logoutAdmin } = useAdminAuth();
+  const { isAdminAuthenticated } = useAdminAuth();
 
   // Check admin authentication
   useEffect(() => {
     if (!isAdminAuthenticated) {
-      router.push('/admin-login');
+      router.push('/dashboard');
     }
   }, [isAdminAuthenticated, router]);
-
-  const handleLogout = () => {
-    logoutAdmin();
-    router.push('/admin-login');
-  };
 
   if (!isAdminAuthenticated) {
     return null;
@@ -70,12 +65,6 @@ export default function AdminPage() {
               Manage the AI Ascent platform and user data
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            Logout
-          </button>
         </div>
 
         {/* Admin Functions Grid */}
@@ -83,7 +72,10 @@ export default function AdminPage() {
           {adminFunctions.map((func) => (
             <div
               key={func.href}
-              onClick={() => router.push(func.href)}
+              onClick={() => {
+                console.log('Navigating to:', func.href);
+                router.push(func.href);
+              }}
               className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group"
             >
               <div className="flex items-center mb-4">
@@ -102,27 +94,6 @@ export default function AdminPage() {
               </p>
             </div>
           ))}
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Quick Access
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <ChartBarIcon className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">View Analytics</p>
-            </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <ClipboardDocumentListIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Manage Onboarding</p>
-            </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <AcademicCapIcon className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Manage Skills</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -12,16 +12,20 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading, user } = useAuth();
   const { showErrorToast, showSuccessToast } = useToast();
   const router = useRouter();
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated && !isLoading) {
-      router.push('/dashboard');
+    if (isAuthenticated && !isLoading && user) {
+      if (user.is_admin) {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,9 +36,7 @@ export default function LoginPage() {
       if (success) {
         showSuccessToast('Login successful! Welcome back.');
         // Small delay to show the success toast before redirecting
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1000);
+        // The useEffect will handle the redirect based on admin status
       } else {
         showErrorToast('Login unsuccessful. Please check your email and password.', () => handleSubmit(e));
       }
