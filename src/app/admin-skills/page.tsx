@@ -277,9 +277,22 @@ export default function AdminSkillsPage() {
                     <option value="course">Course</option>
                     <option value="book">Book</option>
                     <option value="documentation">Documentation</option>
+                    <option value="doc">Document</option>
+                    <option value="pdf">PDF</option>
                     <option value="video">Video</option>
                     <option value="article">Article</option>
+                    <option value="blog">Blog Post</option>
                     <option value="tool">Tool</option>
+                    <option value="software">Software</option>
+                    <option value="template">Template</option>
+                    <option value="worksheet">Worksheet</option>
+                    <option value="cheatsheet">Cheat Sheet</option>
+                    <option value="guide">Guide</option>
+                    <option value="reference">Reference</option>
+                    <option value="podcast">Podcast</option>
+                    <option value="webinar">Webinar</option>
+                    <option value="certification">Certification</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
               </div>

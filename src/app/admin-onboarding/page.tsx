@@ -7,7 +7,8 @@ import {
   createOnboardItem, 
   listOnboardItems, 
   updateOnboardItem, 
-  deleteOnboardItem 
+  deleteOnboardItem,
+  getOnboardItem
 } from '@/lib/api';
 import { useToast } from '@/components/Toast';
 import Navigation from '@/components/Navigation';
@@ -46,8 +47,6 @@ export default function AdminOnboardingPage() {
     title: '',
     specialization: '',
     tags: '',
-    checklist: '',
-    resources: '',
   });
 
   // Check admin authentication
@@ -85,28 +84,18 @@ export default function AdminOnboardingPage() {
     setIsLoading(true);
 
     try {
-      // Parse tags, checklist, and resources
+      // Parse tags
       const tags = formData.tags
         .split(',')
         .map(tag => tag.trim())
         .filter(tag => tag);
-      
-      const checklist = formData.checklist
-        .split('\n')
-        .map(item => item.trim())
-        .filter(item => item);
-      
-      const resources = formData.resources
-        .split('\n')
-        .map(resource => resource.trim())
-        .filter(resource => resource);
 
       const requestData = {
         title: formData.title,
         specialization: formData.specialization,
         tags: tags,
-        checklist: checklist,
-        resources: resources,
+        checklist: [],
+        resources: [],
       };
 
       console.log('Creating onboard item:', requestData);
@@ -118,8 +107,6 @@ export default function AdminOnboardingPage() {
         title: '',
         specialization: '',
         tags: '',
-        checklist: '',
-        resources: '',
       });
       setShowAddForm(false);
       loadOnboardItems();
@@ -132,16 +119,28 @@ export default function AdminOnboardingPage() {
     }
   };
 
-  const handleEditItem = (item: OnboardItem) => {
-    setEditingItem(item);
-    setFormData({
-      title: item.title,
-      specialization: item.specialization,
-      tags: item.tags?.join(', ') || '',
-      checklist: item.checklist?.join('\n') || '',
-      resources: item.resources?.join('\n') || '',
-    });
-    setShowAddForm(true);
+  const handleEditItem = async (item: OnboardItem) => {
+    setIsLoading(true);
+    try {
+      // Fetch the full details of the onboarding item
+      console.log('Fetching onboarding item details for ID:', item.id);
+      const fullItemDetails = await getOnboardItem({ id: item.id });
+      console.log('Fetched item details:', fullItemDetails);
+      
+      setEditingItem(fullItemDetails);
+      setFormData({
+        title: fullItemDetails.title,
+        specialization: fullItemDetails.specialization,
+        tags: fullItemDetails.tags?.join(', ') || '',
+      });
+      setShowAddForm(true);
+    } catch (error) {
+      console.error('Error fetching onboarding item details:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch onboarding item details.';
+      showErrorToast(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleUpdateItem = async (e: React.FormEvent) => {
@@ -151,29 +150,19 @@ export default function AdminOnboardingPage() {
     setIsLoading(true);
 
     try {
-      // Parse tags, checklist, and resources
+      // Parse tags
       const tags = formData.tags
         .split(',')
         .map(tag => tag.trim())
         .filter(tag => tag);
-      
-      const checklist = formData.checklist
-        .split('\n')
-        .map(item => item.trim())
-        .filter(item => item);
-      
-      const resources = formData.resources
-        .split('\n')
-        .map(resource => resource.trim())
-        .filter(resource => resource);
 
       const requestData = {
         id: editingItem.id,
         title: formData.title,
         specialization: formData.specialization,
         tags: tags,
-        checklist: checklist,
-        resources: resources,
+        checklist: [],
+        resources: [],
       };
 
       console.log('Updating onboard item:', requestData);
@@ -185,8 +174,6 @@ export default function AdminOnboardingPage() {
         title: '',
         specialization: '',
         tags: '',
-        checklist: '',
-        resources: '',
       });
       setShowAddForm(false);
       setEditingItem(null);
@@ -222,8 +209,6 @@ export default function AdminOnboardingPage() {
       title: '',
       specialization: '',
       tags: '',
-      checklist: '',
-      resources: '',
     });
     setShowAddForm(false);
     setEditingItem(null);
@@ -317,34 +302,6 @@ export default function AdminOnboardingPage() {
                   onChange={(e) => setFormData({...formData, tags: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="python, django, api"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="checklist" className="block text-sm font-medium text-gray-700 mb-2">
-                  Checklist Items (one per line)
-                </label>
-                <textarea
-                  id="checklist"
-                  rows={4}
-                  value={formData.checklist}
-                  onChange={(e) => setFormData({...formData, checklist: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="Collect laptop from IT&#10;Complete coding assessment&#10;Review company policies"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="resources" className="block text-sm font-medium text-gray-700 mb-2">
-                  Resources (one per line)
-                </label>
-                <textarea
-                  id="resources"
-                  rows={3}
-                  value={formData.resources}
-                  onChange={(e) => setFormData({...formData, resources: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="https://docs.djangoproject.com/&#10;https://www.python.org/&#10;Backend service map"
                 />
               </div>
 
@@ -444,54 +401,6 @@ export default function AdminOnboardingPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                        <CheckCircleIcon className="h-4 w-4 mr-1" />
-                        Checklist ({item.checklist?.length || 0} items)
-                      </h4>
-                      {item.checklist && item.checklist.length > 0 ? (
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          {item.checklist.slice(0, 3).map((task, index) => (
-                            <li key={index} className="flex items-start">
-                              <span className="text-gray-400 mr-2">•</span>
-                              {task}
-                            </li>
-                          ))}
-                          {item.checklist.length > 3 && (
-                            <li className="text-gray-500 italic">
-                              +{item.checklist.length - 3} more items
-                            </li>
-                          )}
-                        </ul>
-                      ) : (
-                        <p className="text-sm text-gray-500 italic">No checklist items</p>
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                        <LinkIcon className="h-4 w-4 mr-1" />
-                        Resources ({item.resources?.length || 0} items)
-                      </h4>
-                      {item.resources && item.resources.length > 0 ? (
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          {item.resources.slice(0, 3).map((resource, index) => (
-                            <li key={index} className="flex items-start">
-                              <span className="text-gray-400 mr-2">•</span>
-                              {resource}
-                            </li>
-                          ))}
-                          {item.resources.length > 3 && (
-                            <li className="text-gray-500 italic">
-                              +{item.resources.length - 3} more resources
-                            </li>
-                          )}
-                        </ul>
-                      ) : (
-                        <p className="text-sm text-gray-500 italic">No resources</p>
-                      )}
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>

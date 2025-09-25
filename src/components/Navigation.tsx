@@ -15,6 +15,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   HeartIcon,
+  CogIcon,
 } from '@heroicons/react/24/outline';
 
 export default function Navigation() {
@@ -22,17 +23,22 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navigation = user?.is_admin 
-    ? []
-    : [
-        { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-        { name: 'Feedback', href: '/feedback', icon: ChatBubbleLeftRightIcon },
-        { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
-        { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
-        { name: 'Interested', href: '/interested-skills', icon: HeartIcon },
-        { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
-        { name: 'Ask', href: '/assistant', icon: SparklesIcon },
-      ];
+  const baseNavigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+    { name: 'Feedback', href: '/feedback', icon: ChatBubbleLeftRightIcon },
+    { name: 'Onboarding', href: '/onboarding', icon: ClipboardDocumentListIcon },
+    { name: 'Skills', href: '/skills', icon: AcademicCapIcon },
+    { name: 'Interested', href: '/interested-skills', icon: HeartIcon },
+    { name: 'Mentors', href: '/mentors', icon: UserGroupIcon },
+    { name: 'Ask', href: '/assistant', icon: SparklesIcon },
+  ];
+
+  // Debug: Log user admin status
+  console.log('Navigation - User:', user?.email, 'Is Admin:', user?.is_admin);
+
+  const navigation = user?.is_admin === true
+    ? [...baseNavigation, { name: 'Admin', href: '/admin', icon: CogIcon }]
+    : baseNavigation;
 
   const isActive = (href: string) => pathname === href;
 
@@ -41,9 +47,9 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0">
+          <div className="flex items-center flex-shrink-0 mr-8">
             <Link href={user?.is_admin ? "/admin" : "/dashboard"} className="flex items-center group">
-              <div className="relative h-7 w-7 sm:h-10 sm:w-10 rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md">
+              <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-lg overflow-hidden group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
                 <Image
                   src="/images/logo.png"
                   alt="AI Ascent Logo"
@@ -51,7 +57,16 @@ export default function Navigation() {
                   height={40}
                   className="object-contain w-full h-full"
                   priority
+                  onError={(e) => {
+                    // Fallback to text if image fails to load
+                    e.currentTarget.style.display = 'none';
+                    const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                    if (nextElement) {
+                      nextElement.style.display = 'block';
+                    }
+                  }}
                 />
+                <span className="text-xs sm:text-sm font-bold text-indigo-600 hidden">AI</span>
               </div>
               <span className="ml-1.5 sm:ml-3 text-sm sm:text-xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors duration-300">
                 AI Ascent
@@ -60,7 +75,7 @@ export default function Navigation() {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-2 flex-1 justify-center">
+          <div className="hidden lg:flex items-center space-x-1 flex-1 justify-start ml-4 mr-6">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -78,7 +93,7 @@ export default function Navigation() {
           </div>
 
           {/* Tablet Navigation - Icons Only */}
-          <div className="hidden md:flex lg:hidden items-center space-x-1 flex-1 justify-center">
+          <div className="hidden md:flex lg:hidden items-center space-x-1 flex-1 justify-start ml-4 mr-6">
             {navigation.map((item) => (
               <Link
                 key={item.name}

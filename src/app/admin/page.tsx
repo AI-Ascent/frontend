@@ -8,7 +8,6 @@ import {
   ChartBarIcon,
   ClipboardDocumentListIcon,
   AcademicCapIcon,
-  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 
 export default function AdminPage() {
@@ -28,7 +27,7 @@ export default function AdminPage() {
 
   const adminFunctions = [
     {
-      title: 'Dashboard',
+      title: 'Admin Dashboard',
       description: 'View KPI data, skill trends, and feedback analytics',
       icon: ChartBarIcon,
       href: '/admin-dashboard',
@@ -51,49 +50,58 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
       <Navigation />
-      
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Admin Panel
-            </h1>
-            <p className="text-gray-600">
-              Manage the AI Ascent platform and user data
-            </p>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Section */}
+        <div className="mb-12 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full mb-6 shadow-lg">
+            <span className="text-2xl font-bold text-white">
+              A
+            </span>
           </div>
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Welcome back, Admin!
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Manage the AI Ascent platform and user data with powerful administrative tools.
+          </p>
         </div>
 
-        {/* Admin Functions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {adminFunctions.map((func) => (
-            <div
-              key={func.href}
-              onClick={() => {
-                console.log('Navigating to:', func.href);
-                router.push(func.href);
-              }}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group"
-            >
-              <div className="flex items-center mb-4">
-                <div className={`p-3 rounded-lg ${func.color} text-white mr-4`}>
-                  <func.icon className="h-6 w-6" />
+        {/* Admin Functions */}
+        <div className="mb-12">
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Admin Functions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {adminFunctions.map((func) => (
+              <div
+                key={func.href}
+                onClick={() => {
+                  console.log('Navigating to:', func.href);
+                  router.push(func.href);
+                }}
+                className="group bg-white p-8 rounded-2xl shadow-soft border border-gray-200 hover:shadow-medium transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+              >
+                <div className="flex items-center mb-6">
+                  <div className={`p-4 ${func.color} rounded-xl shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-110`}>
+                    <func.icon className="h-8 w-8 text-white" />
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {func.title}
-                  </h3>
+                <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors duration-200">
+                  {func.title}
+                </h4>
+                <p className="text-gray-600 leading-relaxed">
+                  {func.description}
+                </p>
+                <div className="mt-4 flex items-center text-indigo-600 font-medium group-hover:translate-x-2 transition-transform duration-200">
+                  <span>Get started</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
-                <ArrowRightIcon className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
               </div>
-              <p className="text-gray-600 text-sm">
-                {func.description}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

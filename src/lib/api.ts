@@ -180,6 +180,19 @@ export interface DeleteOnboardItemResponse {
   message: string;
 }
 
+export interface GetOnboardItemRequest {
+  id: number;
+}
+
+export interface GetOnboardItemResponse {
+  id: number;
+  title: string;
+  specialization: string;
+  tags: string[];
+  checklist: string[];
+  resources: string[];
+}
+
 export interface FinalizeOnboardResponse {
   message: string;
 }
@@ -526,6 +539,17 @@ class ApiClient {
     });
   }
 
+  async getOnboardItem(data: GetOnboardItemRequest): Promise<GetOnboardItemResponse> {
+    // Since there's no specific endpoint to get individual item details,
+    // we'll use the update endpoint with just the ID to fetch the full data
+    const response = await this.request<UpdateOnboardItemResponse>('/onboard/update/', {
+      method: 'POST',
+      body: JSON.stringify({ id: data.id }),
+    });
+    
+    return response.data;
+  }
+
   // Onboarding User Features
   async finalizeOnboard(): Promise<FinalizeOnboardResponse> {
     return this.request<FinalizeOnboardResponse>('/onboard/finalize/', {
@@ -637,6 +661,7 @@ export const createOnboardItem = apiClient.createOnboardItem.bind(apiClient);
 export const updateOnboardItem = apiClient.updateOnboardItem.bind(apiClient);
 export const listOnboardItems = apiClient.listOnboardItems.bind(apiClient);
 export const deleteOnboardItem = apiClient.deleteOnboardItem.bind(apiClient);
+export const getOnboardItem = apiClient.getOnboardItem.bind(apiClient);
 export const finalizeOnboard = apiClient.finalizeOnboard.bind(apiClient);
 export const markChecklistItem = apiClient.markChecklistItem.bind(apiClient);
 export const checkOnboardFinalization = apiClient.checkOnboardFinalization.bind(apiClient);
