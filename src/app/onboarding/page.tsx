@@ -212,11 +212,11 @@ export default function OnboardingPage() {
             )}
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
-            {isFinalized ? 'Onboarding Complete!' : 'Personalized Onboarding'}
+            {isFinalized ? 'Onboarding Checklist Finalized!' : 'Personalized Onboarding'}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {isFinalized 
-              ? 'Congratulations! You have successfully completed your onboarding process. Your progress has been tracked and saved.'
+              ? 'Congratulations! You have finalized your onboarding checklist. Your progress will be tracked and saved as you mark items as completed.'
               : 'Get AI-powered onboarding recommendations tailored to your role and specialization. Complete interactive checklists and access curated resources for a smooth start.'
             }
           </p>
@@ -359,7 +359,6 @@ export default function OnboardingPage() {
                       <div className="mt-6 pt-4 border-t border-gray-200">
                         <button
                           onClick={handleFinalizeOnboard}
-                          disabled={isLoading || getProgressPercentage() < 100}
                           className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200"
                         >
                           {isLoading ? (
@@ -370,7 +369,7 @@ export default function OnboardingPage() {
                           ) : (
                             <>
                               <TrophyIcon className="h-5 w-5 mr-2" />
-                              Finalize Onboarding ({getProgressPercentage()}% Complete)
+                              Finalize Onboarding Checklist
                             </>
                           )}
                         </button>
